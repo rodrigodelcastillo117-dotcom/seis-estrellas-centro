@@ -150,6 +150,37 @@ footer { font-size: 12px; color: var(--muted); text-align: center; }
 details.faltan { font-size: 12px; color: var(--muted); }
 details.faltan summary { cursor: pointer; }
 
+/* la oficina (personajes estilo juguete de bloques: dibujos propios, no marcas) */
+.oficina { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: radial-gradient(ellipse at 50% 0%, rgba(255,154,46,.16), transparent 60%), repeating-linear-gradient(90deg, #241a35 0 46px, #20172f 46px 92px); }
+@media (min-width: 760px) { .oficina { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.puesto { position: relative; background: rgba(18,10,31,.55); border: 1px solid var(--line); border-radius: 16px; padding: 12px 10px 10px; text-align: center; cursor: pointer; transition: transform .15s, border-color .15s; min-width: 0; }
+.puesto:hover, .puesto:focus-visible { transform: translateY(-3px); border-color: var(--pink); outline: none; }
+.puesto.sel { border-color: var(--orange); box-shadow: 0 0 0 2px rgba(255,154,46,.35); }
+.puesto svg { width: 100%; max-width: 190px; height: auto; display: block; margin: 0 auto; }
+@media (prefers-reduced-motion: no-preference) { .puesto .manoI { animation: tecla .5s ease-in-out infinite alternate; } .puesto .manoD { animation: tecla .5s .25s ease-in-out infinite alternate; } .puesto .pant { animation: parpa 2.4s steps(2) infinite; } .puesto.quieto .manoI, .puesto.quieto .manoD { animation: none; } @keyframes tecla { to { transform: translateY(-2.5px); } } @keyframes parpa { 50% { opacity: .55; } } }
+.burbuja { position: absolute; top: 8px; right: 8px; font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 999px; background: var(--panel2); color: var(--muted); max-width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.burbuja.on { color: var(--ok); } .burbuja.ceo { color: var(--orange); } .burbuja.mal { color: #fff; background: var(--bad); }
+.puesto .nm { font-family: var(--display); font-weight: 900; font-size: 22px; line-height: 1; margin-top: 6px; }
+.puesto .rl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+.monitor { width: 54px; height: 30px; margin: 6px auto 0; border-radius: 4px; background: #0d0718; border: 2px solid #4a3a6a; position: relative; overflow: hidden; }
+.monitor i { position: absolute; left: 4px; right: 4px; height: 3px; border-radius: 2px; background: var(--cyan); opacity: .7; }
+.ficha { margin-top: 12px; }
+.ficha h3 { margin: 0; font-family: var(--display); font-size: 26px; }
+.ficha .sub { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.ficha .ahora { background: var(--panel2); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-weight: 500; }
+.ficha .cols2 { display: grid; gap: 14px; }
+@media (min-width: 760px) { .ficha .cols2 { grid-template-columns: 1fr 1fr; } }
+.ficha h4 { margin: 0 0 6px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--orange); }
+.ficha ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; font-size: 14px; }
+.ficha ul .f { color: var(--muted); font-size: 12px; }
+.ops .item { display: grid; grid-template-columns: 92px 86px 1fr; gap: 8px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.ops .item:first-child { border-top: 0; }
+.ops .item > * { min-width: 0; }
+.ops .item .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.red { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; text-align: center; color: #120a1f; }
+.red.YouTube { background: #ff4d4d; } .red.Instagram { background: #f06ba8; } .red.Facebook { background: #6aa6ff; } .red.TikTok { background: #25f4ee; }
+.ops .hora { font-variant-numeric: tabular-nums; font-weight: 700; }
+
 </style>
 </head>
 <body>
@@ -179,6 +210,18 @@ details.faltan summary { cursor: pointer; }
 
   <div class="card errbox" id="errBox" hidden></div>
   <div class="avisos" id="avisos"></div>
+
+  <section aria-labelledby="hOf">
+    <h2 id="hOf">La oficina <small>toca a alguien para ver qué hace</small></h2>
+    <div class="oficina" id="oficina"><div class="card empty">Cargando…</div></div>
+    <div class="card ficha" id="ficha" hidden></div>
+  </section>
+
+  <section class="card ops" aria-labelledby="hOps">
+    <h2 id="hOps">Centro de operaciones <small>lo próximo que sale · hora del centro de México</small></h2>
+    <div id="opsAlertas"></div>
+    <div id="ops"><div class="empty">Cargando…</div></div>
+  </section>
 
   <section aria-labelledby="hRes">
     <h2 id="hRes">Resumen <small>las cuatro plataformas</small></h2>
@@ -337,6 +380,92 @@ details.faltan summary { cursor: pointer; }
     return c;
   }
 
+
+  // ---------- la oficina (open space; personajes de bloques dibujados aquí, sentados en su escritorio) ----------
+  var FIG = {
+    ceo:       { torso: '#1b1b2b', pelo: '#3a2414', letra: '', extra: 'corbata', pantalla: '#ff9a2e' },
+    claude:    { torso: '#ff7a1a', pelo: '#2a1a12', letra: 'C', extra: 'audifonos', pantalla: '#ff9a2e' },
+    muse:      { torso: '#2f7bff', pelo: '#5a2a1a', letra: 'M', extra: 'cola', pantalla: '#28dcff' },
+    chatgpt:   { torso: '#f4f4f4', pelo: '#1a1a1a', letra: 'G', extra: 'lentes', pantalla: '#3ddc97', oscuro: true },
+    reportero: { torso: '#e04848', pelo: '#1a1a1a', letra: 'N', extra: 'gorra', pantalla: '#ffd23f', mic: true },
+    marketing: { torso: '#ff2e88', pelo: '#b0552a', letra: 'MK', extra: 'cola', pantalla: '#ff2e88' },
+    ventas:    { torso: '#1fa35c', pelo: '#2a2a2a', letra: '$', extra: 'corbata2', pantalla: '#3ddc97' },
+    cfo:       { torso: '#4b5563', pelo: '#6b6b6b', letra: 'CFO', extra: 'lentes', pantalla: '#ffd23f' }
+  };
+  function escena(id) {
+    var f = FIG[id] || FIG.claude, piel = '#ffd23f', x = '<svg viewBox="0 0 160 132" aria-hidden="true">';
+    x += '<rect x="56" y="42" width="48" height="50" rx="9" fill="#2a2440"/>';                         // respaldo de la silla
+    x += '<rect x="72" y="8" width="16" height="7" rx="2" fill="' + piel + '"/>';                        // perno
+    x += '<rect x="62" y="14" width="36" height="31" rx="8" fill="' + piel + '"/>';                       // cabeza
+    if (f.extra === 'cola') x += '<path d="M60 20 Q55 42 64 47 L66 22 Z" fill="' + f.pelo + '"/>';
+    if (f.extra === 'gorra') x += '<path d="M60 22 Q60 9 80 9 Q100 9 100 22 Z" fill="#20242c"/><rect x="58" y="19" width="50" height="5" rx="2" fill="#20242c"/>';
+    else x += '<path d="M61 24 Q62 11 80 11 Q98 11 99 24 L99 19 Q96 8 80 8 Q64 8 61 19 Z" fill="' + f.pelo + '"/>';
+    x += '<circle cx="73" cy="29" r="2.4" fill="#1a1a1a"/><circle cx="87" cy="29" r="2.4" fill="#1a1a1a"/>';
+    if (f.extra === 'lentes') x += '<g fill="none" stroke="#1a1a1a" stroke-width="1.6"><circle cx="73" cy="29" r="5"/><circle cx="87" cy="29" r="5"/><path d="M78 29 h4"/></g>';
+    x += '<path d="M73 36 Q80 41 87 36" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    if (f.extra === 'audifonos') x += '<path d="M60 29 Q60 9 80 9 Q100 9 100 29" stroke="#222" stroke-width="3" fill="none"/><rect x="56" y="25" width="7" height="11" rx="3" fill="#222"/><rect x="97" y="25" width="7" height="11" rx="3" fill="#222"/>';
+    x += '<rect x="74" y="45" width="12" height="4" fill="' + piel + '"/>';
+    x += '<path d="M60 49 L100 49 L104 88 L56 88 Z" fill="' + f.torso + '"' + (f.oscuro ? ' stroke="#c9c9c9" stroke-width="1"' : '') + '/>';  // torso
+    if (f.extra === 'corbata' || f.extra === 'corbata2') x += '<path d="M72 49 L80 58 L88 49" fill="#f4eefb"/><path d="M78 52 L82 52 L81 57 L84 74 L80 78 L76 74 L79 57 Z" fill="' + (f.extra === 'corbata' ? '#ff2e88' : '#0e6b3a') + '"/>';
+    if (f.letra) x += '<text x="80" y="76" text-anchor="middle" font-family="Big Shoulders Display, Arial Narrow, sans-serif" font-weight="900" font-size="' + (f.letra.length > 1 ? 13 : 18) + '" fill="' + (f.oscuro ? '#10a37f' : '#fff') + '">' + f.letra + '</text>';
+    // brazos hacia el teclado (las manos teclean)
+    x += '<g class="manoI"><rect x="46" y="54" width="11" height="30" rx="5" fill="' + f.torso + '" transform="rotate(18 51 54)"' + (f.oscuro ? ' stroke="#c9c9c9"' : '') + '/><circle cx="62" cy="86" r="5" fill="' + piel + '"/></g>';
+    x += '<g class="manoD"><rect x="103" y="54" width="11" height="30" rx="5" fill="' + f.torso + '" transform="rotate(-18 108 54)"' + (f.oscuro ? ' stroke="#c9c9c9"' : '') + '/><circle cx="98" cy="86" r="5" fill="' + piel + '"/></g>';
+    x += '<rect x="12" y="88" width="136" height="10" rx="3" fill="#a0703c"/><rect x="18" y="98" width="124" height="30" rx="2" fill="#7a5229"/>';  // escritorio
+    x += '<rect x="62" y="84" width="36" height="5" rx="1.5" fill="#2b2b33"/>';                           // teclado
+    x += '<rect x="112" y="58" width="36" height="26" rx="3" fill="#0d0718" stroke="#4a3a6a" stroke-width="2"/><rect x="127" y="84" width="6" height="5" fill="#4a3a6a"/>';  // monitor
+    x += '<g class="pant" fill="' + f.pantalla + '"><rect x="116" y="63" width="22" height="2.6" rx="1"/><rect x="116" y="69" width="27" height="2.6" rx="1"/><rect x="116" y="75" width="15" height="2.6" rx="1"/></g>';
+    if (f.mic) x += '<rect x="24" y="70" width="5" height="18" fill="#333"/><rect x="21" y="62" width="11" height="12" rx="5" fill="#555"/>';
+    else x += '<rect x="22" y="76" width="12" height="12" rx="2" fill="#f4eefb"/><path d="M34 79 q5 3 0 6" stroke="#f4eefb" stroke-width="2" fill="none"/>';  // taza
+    return x + '</svg>';
+  }
+  var ofSel = null;
+  function fichaDe(p) {
+    var F = $('ficha'); F.replaceChildren(); F.hidden = false;
+    F.append(el('h3', null, p.nombre), el('div', 'sub', p.rol + ' · ' + (p.estado || '')));
+    F.append(el('div', 'ahora', 'Ahora: ' + (p.ahora || '—')));
+    var c = el('div', 'cols2');
+    var a = el('div'); a.append(el('h4', null, 'Sus tareas'));
+    var ul = el('ul'); (p.tareas || []).forEach(function (t) { ul.append(el('li', null, t)); });
+    if (!(p.tareas || []).length) ul.append(el('li', null, 'Sin tareas pendientes'));
+    a.append(ul);
+    var b = el('div'); b.append(el('h4', null, 'Lo último que hizo'));
+    var ul2 = el('ul');
+    (p.hecho || []).forEach(function (h) {
+      var li = el('li');
+      if (h.url) { var lk = el('a', null, h.t); lk.href = h.url; lk.target = '_blank'; lk.rel = 'noopener'; li.append(lk); } else li.append(document.createTextNode(h.t));
+      if (h.f) li.append(el('span', 'f', ' · ' + fmtFull.format(new Date(h.f))));
+      ul2.append(li);
+    });
+    if (!(p.hecho || []).length) ul2.append(el('li', null, 'Nada registrado todavía'));
+    b.append(ul2); c.append(a, b); F.append(c);
+  }
+  function renderOficina(of) {
+    var O = $('oficina'); O.replaceChildren();
+    if (!of || !of.equipo) { O.append(el('div', 'card empty', 'La oficina aparece con la próxima foto (cada hora).')); return; }
+    of.equipo.forEach(function (p) {
+      var d = el('div', 'puesto' + (p.id === 'ceo' ? ' quieto' : '') + (ofSel === p.id ? ' sel' : ''));
+      d.tabIndex = 0; d.setAttribute('role', 'button'); d.setAttribute('aria-label', p.nombre + ': ' + (p.ahora || ''));
+      d.append(el('span', 'burbuja' + (p.id === 'ceo' ? ' ceo' : (/ATRASADO/.test(p.estado || '') ? ' mal' : (p.estado === 'Trabajando' || p.estado === 'Al día' || /hace (minutos|[1-9] h)/.test(p.estado || '') ? ' on' : ''))), p.estado || ''));
+      var fig = el('div'); fig.innerHTML = escena(p.id); d.append(fig);
+      d.append(el('div', 'nm', p.nombre), el('div', 'rl', p.rol));
+      var abrir = function () { ofSel = p.id; document.querySelectorAll('.puesto').forEach(function (z) { z.classList.remove('sel'); }); d.classList.add('sel'); fichaDe(p); };
+      d.addEventListener('click', abrir); d.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); } });
+      O.append(d);
+      if (ofSel === p.id) fichaDe(p);
+    });
+    var A = $('opsAlertas'); A.replaceChildren();
+    (of.alertas || []).forEach(function (t) { A.append(el('div', 'aviso', t)); });
+    var S = $('ops'); S.replaceChildren();
+    var px = of.proximas || [];
+    if (!px.length) S.append(el('div', 'empty', 'No hay nada programado.'));
+    px.forEach(function (it) {
+      var r = el('div', 'item');
+      var cu = new Date(it.cuando);
+      r.append(el('span', 'hora', fmtFull.format(cu).replace(/\.$/, '')), el('span', 'red ' + it.red, it.red), el('span', 't', it.t || ''));
+      S.append(r);
+    });
+  }
   function render(d) {
     datosAct = d;
     var y = d.yt || {}, ig = d.ig || {}, fb = d.fb || {};
@@ -350,6 +479,8 @@ details.faltan summary { cursor: pointer; }
     if (ig.error) av.append(el('div', 'aviso', 'Instagram: ' + ig.error));
     if (fb.error) av.append(el('div', 'aviso', 'Facebook: ' + fb.error));
     if (d.foto && viejo(d.foto, 3)) av.append(el('div', 'aviso', 'La foto de Instagram, Facebook y TikTok es de ' + hace(d.foto) + '. Se actualiza cada hora; si sigue así, revisa la tarea de cada hora.'));
+
+    renderOficina(d.oficina || (d.ig && d.ig._of));
 
     // resumen 3 plataformas
     var reels = ig.reels || [], fbv = (fb.videos || []).filter(function (x) { return x.pub !== false; });

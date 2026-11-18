@@ -173,6 +173,7 @@ module.exports = async (req, res) => {
     ig: (SNAP && SNAP.ig) || null,
     fb: (SNAP && SNAP.fb) || null,
     tt: (SNAP && SNAP.tt) || null,
+    oficina: (SNAP && SNAP.oficina) || null,
     foto: (SNAP && SNAP.act) || null,
     faltan: (SNAP && SNAP.faltan) || [],
   };
