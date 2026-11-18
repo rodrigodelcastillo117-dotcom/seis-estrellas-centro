@@ -1,0 +1,6 @@
+{
+  "name": "seis-estrellas-centro",
+  "private": true,
+  "description": "Centro de control del canal Seis Estrellas: estadísticas en vivo de YouTube",
+  "engines": { "node": "22.x" }
+}
