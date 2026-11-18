@@ -174,6 +174,7 @@ module.exports = async (req, res) => {
     fb: (SNAP && SNAP.fb) || null,
     tt: (SNAP && SNAP.tt) || null,
     oficina: (SNAP && SNAP.oficina) || null,
+    fabrica: (SNAP && SNAP.fabrica) || null,
     foto: (SNAP && SNAP.act) || null,
     faltan: (SNAP && SNAP.faltan) || [],
   };
