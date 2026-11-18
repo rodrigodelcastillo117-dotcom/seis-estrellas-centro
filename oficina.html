@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#120a1f">
+<title>Seis Estrellas · Oficina</title>
+<style>
+:root { --bg:#120a1f; --panel:#1c1230; --panel2:#241840; --line:#33244d; --fg:#f4eefb; --muted:#b3a5cc; --pink:#ff2e88; --orange:#ff9a2e; --cyan:#28dcff; --ok:#3ddc97; --bad:#ff5c7a; color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--fg); font: 15px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-user-select: none; user-select: none; touch-action: none; }
+canvas { display: block; }
+#hud { position: fixed; left: 12px; top: max(12px, env(safe-area-inset-top)); display: flex; gap: 8px; align-items: center; z-index: 5; }
+#hud a, #hud span { background: rgba(28,18,48,.85); border: 1px solid var(--line); color: var(--fg); padding: 7px 11px; border-radius: 10px; font-size: 13px; text-decoration: none; }
+#ayuda { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(14px, env(safe-area-inset-bottom)); background: rgba(28,18,48,.85); border: 1px solid var(--line); padding: 8px 14px; border-radius: 12px; font-size: 13px; color: var(--muted); z-index: 5; text-align: center; max-width: calc(100% - 32px); }
+#cerca { position: fixed; left: 50%; top: 58%; transform: translateX(-50%); background: var(--orange); color: #1a0a14; font-weight: 700; padding: 8px 14px; border-radius: 999px; z-index: 6; cursor: pointer; display: none; }
+#ficha { position: fixed; right: 12px; top: max(12px, env(safe-area-inset-top)); width: min(420px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow: auto; background: rgba(28,18,48,.96); border: 1px solid var(--line); border-radius: 16px; padding: 16px; z-index: 7; display: none; user-select: text; -webkit-user-select: text; }
+#ficha h3 { margin: 0; font-size: 24px; } #ficha .sub { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+#ficha .ahora { background: var(--panel2); border-radius: 10px; padding: 9px 11px; margin-bottom: 10px; }
+#ficha h4 { margin: 12px 0 6px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--orange); }
+#ficha ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; font-size: 14px; } #ficha .f { color: var(--muted); font-size: 12px; } #ficha a { color: var(--cyan); }
+#ficha .x { position: absolute; right: 10px; top: 8px; background: none; border: 0; color: var(--muted); font-size: 22px; cursor: pointer; }
+.op { display: grid; grid-template-columns: 116px 78px 1fr; gap: 6px; font-size: 13px; padding: 5px 0; border-top: 1px solid var(--line); } .op:first-child { border-top: 0; }
+.red { font-size: 11px; font-weight: 700; border-radius: 999px; text-align: center; color: #120a1f; padding: 1px 6px; }
+.YouTube { background: #ff4d4d; } .Instagram { background: #f06ba8; } .Facebook { background: #6aa6ff; } .TikTok { background: #25f4ee; }
+#joy { position: fixed; left: max(18px, env(safe-area-inset-left)); bottom: max(60px, env(safe-area-inset-bottom)); width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18); z-index: 5; display: none; touch-action: none; }
+#joy i { position: absolute; left: 35px; top: 35px; width: 50px; height: 50px; border-radius: 50%; background: rgba(255,154,46,.75); }
+#login { position: fixed; inset: 0; display: none; place-items: center; z-index: 9; background: var(--bg); }
+#login form { display: grid; gap: 12px; width: min(320px, 90%); text-align: center; }
+#login input { padding: 13px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); font-size: 18px; text-align: center; }
+#login button { padding: 12px; border: 0; border-radius: 12px; font-weight: 700; background: linear-gradient(90deg, var(--pink), var(--orange)); color: #1a0a14; }
+#carga { position: fixed; inset: 0; display: grid; place-items: center; z-index: 8; background: var(--bg); color: var(--muted); }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
+</head>
+<body>
+<div id="carga">Entrando a la oficina…</div>
+<div id="hud"><a href="/">← Panel</a><span id="estadoDatos">Conectando…</span></div>
+<div id="ayuda">Camina con las <b>flechas</b> (↑ ↓ avanzar · ← → girar) · toca a alguien para ver qué hace</div>
+<div id="cerca"></div>
+<div id="joy"><i></i></div>
+<aside id="ficha" aria-live="polite"><button class="x" id="cerrar" aria-label="Cerrar">×</button><div id="fichaC"></div></aside>
+<section id="login"><form id="lf"><h2 style="margin:0">Seis Estrellas</h2><input id="pw" type="password" inputmode="numeric" placeholder="Contraseña" aria-label="Contraseña"><button>Entrar</button><p id="le" style="color:var(--bad);margin:0;min-height:1.2em"></p></form></section>
+
+<script type="module">
+import * as THREE from 'three';
+
+// ---------- datos (mismo acceso que el panel) ----------
+const KEY = 'seis-estrellas-centro-key';
+let key = null; try { key = localStorage.getItem(KEY); } catch (e) {}
+let DATOS = null;
+const fmt = new Intl.DateTimeFormat('es-MX', { timeZone: 'America/Mexico_City', weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false });
+async function cargar() {
+  if (!key) { document.getElementById('login').style.display = 'grid'; document.getElementById('carga').style.display = 'none'; return; }
+  try {
+    const r = await fetch('/api/stats', { headers: { 'x-panel-key': key }, cache: 'no-store' });
+    if (r.status === 401) { try { localStorage.removeItem(KEY); } catch (e) {} key = null; document.getElementById('le').textContent = 'Contraseña incorrecta'; return cargar(); }
+    DATOS = await r.json();
+    document.getElementById('estadoDatos').textContent = 'Datos: ' + (DATOS.oficina && DATOS.oficina.act ? fmt.format(new Date(DATOS.oficina.act)) : 'sin foto');
+    actualizarEtiquetas(); pintarPantalla();
+  } catch (e) { document.getElementById('estadoDatos').textContent = 'Sin conexión: reintento en 1 min'; setTimeout(cargar, 60000); }
+}
+document.getElementById('lf').addEventListener('submit', e => { e.preventDefault(); key = document.getElementById('pw').value.trim(); try { localStorage.setItem(KEY, key); } catch (er) {} document.getElementById('login').style.display = 'none'; cargar(); });
+setInterval(cargar, 300000);
+
+// ---------- escena ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#1a1030'); scene.fog = new THREE.Fog('#1a1030', 18, 42);
+const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 100);
+scene.add(new THREE.HemisphereLight('#ffe9d6', '#2a1a40', 0.9));
+const sol = new THREE.DirectionalLight('#ffd2a6', 1.1); sol.position.set(-8, 14, 6); sol.castShadow = true; sol.shadow.mapSize.set(1024, 1024);
+Object.assign(sol.shadow.camera, { left: -16, right: 16, top: 16, bottom: -16 }); scene.add(sol);
+
+const M = c => new THREE.MeshStandardMaterial({ color: c, roughness: .75 });
+const caja = (w, h, d, c, x, y, z, sombra = true) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), typeof c === 'string' ? M(c) : c); m.position.set(x, y, z); m.castShadow = sombra; m.receiveShadow = true; scene.add(m); return m; };
+const SOLIDOS = []; // cajas para chocar: {minX,maxX,minZ,maxZ}
+const solido = (x, z, w, d) => SOLIDOS.push({ minX: x - w / 2, maxX: x + w / 2, minZ: z - d / 2, maxZ: z + d / 2 });
+
+// piso, paredes y ventanales
+const W = 26, D = 22;
+const piso = caja(W, .2, D, '#3a2a1e', 0, -.1, 0, false);
+for (let i = -W / 2 + 1; i < W / 2; i += 2) caja(.04, .01, D, '#4a3726', i, .005, 0, false);   // tablas
+caja(10, .02, 6, '#5b2c6f', 0, .012, 3, false);                                                 // alfombra del open space
+caja(W, 4, .3, '#2a1f3d', 0, 2, -D / 2); caja(W, 4, .3, '#2a1f3d', 0, 2, D / 2);
+caja(.3, 4, D, '#2a1f3d', -W / 2, 2, 0); caja(.3, 4, D, '#2a1f3d', W / 2, 2, 0);
+const vidrio = new THREE.MeshStandardMaterial({ color: '#ff9a5a', emissive: '#ff7a3a', emissiveIntensity: .55, transparent: true, opacity: .55 });
+for (let x = -10; x <= 10; x += 4) caja(3.2, 2.2, .05, vidrio, x, 2, -D / 2 + .2, false);    // atardecer de Leonida por la ventana
+SOLIDOS.push({ minX: -99, maxX: 99, minZ: -99, maxZ: -D / 2 + .6 }, { minX: -99, maxX: 99, minZ: D / 2 - .6, maxZ: 99 }, { minX: -99, maxX: -W / 2 + .6, minZ: -99, maxZ: 99 }, { minX: W / 2 - .6, maxX: 99, minZ: -99, maxZ: 99 });
+// lámparas
+for (const [x, z] of [[-6, -4], [0, -4], [6, -4], [-6, 3], [0, 3], [6, 3]]) { const l = new THREE.PointLight('#ffcf9a', 8, 9, 2); l.position.set(x, 3.6, z); scene.add(l); caja(1.4, .06, .4, new THREE.MeshStandardMaterial({ color: '#fff', emissive: '#ffe2b8', emissiveIntensity: 1 }), x, 3.9, z, false); }
+
+// letrero de recepción
+function texto(lineas, w = 1024, h = 256, fondo = '#120a1f', tam = 96, color = '#ff9a2e') {
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const g = cv.getContext('2d');
+  g.fillStyle = fondo; g.fillRect(0, 0, w, h); g.fillStyle = color; g.textAlign = 'center'; g.textBaseline = 'middle';
+  lineas.forEach((t, i) => { g.font = (i === 0 ? '900 ' : '600 ') + (i === 0 ? tam : tam * .45) + 'px Inter, Arial'; g.fillText(t, w / 2, h / (lineas.length + 1) * (i + 1)); });
+  const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace; return tx;
+}
+const letrero = new THREE.Mesh(new THREE.PlaneGeometry(6, 1.5), new THREE.MeshBasicMaterial({ map: texto(['SEIS ESTRELLAS', 'GTA 6 en español · la oficina']) }));
+letrero.position.set(0, 2.7, D / 2 - .2); letrero.rotation.y = Math.PI; scene.add(letrero);
+caja(4, 1.05, 1, '#ff2e88', 0, .52, D / 2 - 2.4); solido(0, D / 2 - 2.4, 4, 1);                // mostrador de recepción
+
+// plantas
+function planta(x, z) { const m = new THREE.Mesh(new THREE.CylinderGeometry(.3, .25, .6, 12), M('#7a5229')); m.position.set(x, .3, z); scene.add(m); const h = new THREE.Mesh(new THREE.SphereGeometry(.55, 12, 10), M('#2f8f4e')); h.position.set(x, 1.05, z); h.castShadow = true; scene.add(h); solido(x, z, .7, .7); }
+[[-12, -10], [12, -10], [-12, 9.5], [12, 9.5], [-12, 0], [12, 0]].forEach(p => planta(...p));
+// zona de café
+caja(2.4, .95, .8, '#a0703c', 10, .48, 7.5); solido(10, 7.5, 2.4, .8);
+caja(.5, .6, .45, '#222', 10.6, 1.25, 7.5); caja(.18, .2, .18, '#f4eefb', 9.6, 1.05, 7.5);
+
+// ---------- pantalla del centro de operaciones ----------
+const pantCv = document.createElement('canvas'); pantCv.width = 1600; pantCv.height = 900;
+const pantTx = new THREE.CanvasTexture(pantCv); pantTx.colorSpace = THREE.SRGBColorSpace;
+const pantalla = new THREE.Mesh(new THREE.PlaneGeometry(8, 4.5), new THREE.MeshBasicMaterial({ map: pantTx }));
+pantalla.position.set(0, 2.25, -D / 2 + .3); scene.add(pantalla); pantalla.userData = { tipo: 'ops' };
+caja(8.3, 4.8, .1, '#0b0614', 0, 2.25, -D / 2 + .22, false);
+function pintarPantalla() {
+  const g = pantCv.getContext('2d'); g.fillStyle = '#0d0718'; g.fillRect(0, 0, 1600, 900);
+  g.fillStyle = '#ff9a2e'; g.font = '900 64px Inter, Arial'; g.fillText('CENTRO DE OPERACIONES', 60, 100);
+  g.fillStyle = '#b3a5cc'; g.font = '500 30px Inter, Arial'; g.fillText('Lo próximo que sale · hora del centro de México', 60, 150);
+  const px = (DATOS && DATOS.oficina && DATOS.oficina.proximas) || [];
+  const col = { YouTube: '#ff4d4d', Instagram: '#f06ba8', Facebook: '#6aa6ff', TikTok: '#25f4ee' };
+  px.slice(0, 11).forEach((it, i) => {
+    const y = 220 + i * 60; g.fillStyle = '#f4eefb'; g.font = '700 30px Inter, Arial'; g.fillText(fmt.format(new Date(it.cuando)), 60, y);
+    g.fillStyle = col[it.red] || '#888'; g.fillRect(470, y - 30, 170, 40); g.fillStyle = '#120a1f'; g.font = '800 24px Inter, Arial'; g.fillText(it.red, 485, y - 2);
+    g.fillStyle = '#f4eefb'; g.font = '500 28px Inter, Arial'; g.fillText((it.t || '').slice(0, 52), 665, y);
+  });
+  if (!px.length) { g.fillStyle = '#b3a5cc'; g.font = '500 34px Inter, Arial'; g.fillText('Sin datos todavía.', 60, 260); }
+  pantTx.needsUpdate = true;
+}
+
+// ---------- personajes de bloques, sentados en su escritorio ----------
+const EQUIPO = [
+  { id: 'ceo', nombre: 'Rodrigo · CEO', torso: '#1b1b2b', pelo: '#3a2414', pant: '#ff9a2e', corbata: '#ff2e88' },
+  { id: 'claude', nombre: 'Claude', torso: '#ff7a1a', pelo: '#2a1a12', pant: '#ff9a2e', audif: true },
+  { id: 'muse', nombre: 'Muse', torso: '#2f7bff', pelo: '#5a2a1a', pant: '#28dcff', cola: true },
+  { id: 'chatgpt', nombre: 'ChatGPT', torso: '#f4f4f4', pelo: '#1a1a1a', pant: '#3ddc97', lentes: true },
+  { id: 'reportero', nombre: 'Reportero', torso: '#e04848', pelo: '#1a1a1a', pant: '#ffd23f', gorra: true },
+  { id: 'marketing', nombre: 'Marketing', torso: '#ff2e88', pelo: '#b0552a', pant: '#ff2e88', cola: true },
+  { id: 'ventas', nombre: 'Ventas', torso: '#1fa35c', pelo: '#2a2a2a', pant: '#3ddc97', corbata: '#0e6b3a' },
+  { id: 'cfo', nombre: 'CFO', torso: '#4b5563', pelo: '#6b6b6b', pant: '#ffd23f', lentes: true },
+  { id: 'mejoras', nombre: 'Mejora continua', torso: '#8b5cf6', pelo: '#2a1a12', pant: '#28dcff', gorra: true }
+];
+// open space: dos filas de 4 escritorios mirando hacia la pantalla; el CEO tiene su escritorio al frente
+const POS = { ceo: [0, -6.2, 0], claude: [-6, -1.5, 0], muse: [-2, -1.5, 0], chatgpt: [2, -1.5, 0], reportero: [6, -1.5, 0], marketing: [-6, 3.5, 0], ventas: [-2, 3.5, 0], cfo: [2, 3.5, 0], mejoras: [6, 3.5, 0] };
+const PIEL = M('#ffd23f'); const NEGRO = M('#1a1a1a');
+const brazos = [], clicables = [], etiquetas = {};
+function etiqueta(t, sub, color) {
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 160; const g = cv.getContext('2d');
+  g.fillStyle = 'rgba(18,10,31,.88)'; g.beginPath(); g.roundRect(4, 4, 504, 152, 28); g.fill(); g.strokeStyle = color; g.lineWidth = 6; g.stroke();
+  g.fillStyle = '#f4eefb'; g.textAlign = 'center'; g.font = '800 54px Inter, Arial'; g.fillText(t, 256, 68);
+  g.fillStyle = color; g.font = '600 34px Inter, Arial'; g.fillText(sub.slice(0, 26), 256, 120);
+  const tx = new THREE.CanvasTexture(cv); tx.colorSpace = THREE.SRGBColorSpace;
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tx, depthTest: true })); s.scale.set(1.15, .36, 1); return s;
+}
+function persona(p) {
+  const [x, z] = POS[p.id]; const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = Math.PI; scene.add(g);  // miran hacia la entrada
+  const add = (geo, mat, px, py, pz) => { const m = new THREE.Mesh(geo, mat); m.position.set(px, py, pz); m.castShadow = true; g.add(m); return m; };
+  // escritorio, monitor, teclado, silla
+  add(new THREE.BoxGeometry(1.9, .08, .9), M('#a0703c'), 0, .78, -.55); add(new THREE.BoxGeometry(1.8, .74, .06), M('#7a5229'), 0, .38, -.98);
+  add(new THREE.BoxGeometry(.9, .55, .05), M('#0d0718'), 0, 1.13, -.85); add(new THREE.BoxGeometry(.06, .25, .06), M('#4a3a6a'), 0, .93, -.85);
+  const scr = add(new THREE.PlaneGeometry(.82, .47), new THREE.MeshStandardMaterial({ color: p.pant, emissive: p.pant, emissiveIntensity: .7 }), 0, 1.13, -.82); scr.rotation.y = 0;
+  add(new THREE.BoxGeometry(.5, .03, .16), M('#2b2b33'), 0, .835, -.4);
+  add(new THREE.BoxGeometry(.18, .14, .18), M('#f4eefb'), .7, .89, -.5);
+  add(new THREE.BoxGeometry(.62, .08, .58), M('#2a2440'), 0, .5, .25); add(new THREE.BoxGeometry(.62, .7, .08), M('#2a2440'), 0, .88, .55); add(new THREE.CylinderGeometry(.04, .04, .45, 8), M('#555'), 0, .25, .25);
+  solido(x, z + .55, 2, 1.1);
+  // minifig sentada (mira hacia -z, al monitor)
+  const t = M(p.torso);
+  add(new THREE.BoxGeometry(.5, .55, .28), t, 0, .86, .22);                                   // torso
+  add(new THREE.BoxGeometry(.5, .12, .3), M('#2b2b3d'), 0, .58, .22);                          // cadera
+  add(new THREE.BoxGeometry(.22, .14, .5), M('#2b2b3d'), -.13, .58, -.05); add(new THREE.BoxGeometry(.22, .14, .5), M('#2b2b3d'), .13, .58, -.05); // muslos
+  add(new THREE.BoxGeometry(.22, .45, .14), M('#2b2b3d'), -.13, .33, -.27); add(new THREE.BoxGeometry(.22, .45, .14), M('#2b2b3d'), .13, .33, -.27); // piernas
+  const cab = add(new THREE.CylinderGeometry(.21, .21, .36, 20), PIEL, 0, 1.36, .22);           // cabeza
+  add(new THREE.CylinderGeometry(.11, .11, .08, 16), PIEL, 0, 1.58, .22);                         // perno
+  add(new THREE.SphereGeometry(.03, 8, 8), NEGRO, -.08, 1.4, .02); add(new THREE.SphereGeometry(.03, 8, 8), NEGRO, .08, 1.4, .02);  // ojos
+  add(new THREE.TorusGeometry(.07, .012, 6, 12, Math.PI), NEGRO, 0, 1.3, .02).rotation.z = Math.PI;                                  // sonrisa
+  if (p.gorra) { add(new THREE.CylinderGeometry(.23, .23, .12, 20), M('#20242c'), 0, 1.56, .22); add(new THREE.BoxGeometry(.3, .03, .2), M('#20242c'), 0, 1.51, .0); }
+  else add(new THREE.CylinderGeometry(.225, .225, .14, 20), M(p.pelo), 0, 1.5, .24);
+  if (p.cola) add(new THREE.BoxGeometry(.12, .3, .1), M(p.pelo), 0, 1.35, .45);
+  if (p.audif) { add(new THREE.TorusGeometry(.24, .025, 6, 18, Math.PI), M('#222'), 0, 1.45, .22).rotation.y = Math.PI / 2; add(new THREE.BoxGeometry(.06, .14, .12), M('#222'), -.24, 1.36, .22); add(new THREE.BoxGeometry(.06, .14, .12), M('#222'), .24, 1.36, .22); }
+  if (p.lentes) { add(new THREE.TorusGeometry(.055, .012, 6, 14), NEGRO, -.08, 1.4, .01); add(new THREE.TorusGeometry(.055, .012, 6, 14), NEGRO, .08, 1.4, .01); }
+  if (p.corbata) add(new THREE.BoxGeometry(.08, .32, .02), M(p.corbata), 0, .88, .07);
+  // brazos al teclado (teclean)
+  for (const s of [-1, 1]) {
+    const b = new THREE.Group(); b.position.set(s * .31, 1.05, .2); g.add(b);
+    const br = new THREE.Mesh(new THREE.BoxGeometry(.13, .42, .13), t); br.position.set(0, -.15, -.1); br.rotation.x = .9; br.castShadow = true; b.add(br);
+    const mano = new THREE.Mesh(new THREE.SphereGeometry(.07, 10, 10), PIEL); mano.position.set(-s * .04, -.3, -.32); b.add(mano);
+    brazos.push({ b, fase: Math.random() * 6, quieto: p.id === 'ceo' });
+  }
+  // zona clicable (cubre a la persona y su escritorio)
+  const hit = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.8, 1.6), new THREE.MeshBasicMaterial({ visible: false })); hit.position.set(0, .9, 0); hit.userData = { tipo: 'persona', id: p.id }; g.add(hit); clicables.push(hit);
+  const et = etiqueta(p.nombre, 'cargando…', '#ff9a2e'); et.position.set(0, 1.95, .2); g.add(et); etiquetas[p.id] = { et, g, p };
+}
+EQUIPO.forEach(persona); clicables.push(pantalla);
+function actualizarEtiquetas() {
+  const eq = (DATOS && DATOS.oficina && DATOS.oficina.equipo) || [];
+  for (const id in etiquetas) {
+    const d = eq.find(e => e.id === id); const e = etiquetas[id]; const est = d ? (d.estado || '') : 'sin datos';
+    const col = /ATRASADO/.test(est) ? '#ff5c7a' : (/Al día|Trabajando|hace (minutos|[1-9] h)/.test(est) ? '#3ddc97' : '#ff9a2e');
+    e.g.remove(e.et); e.et = etiqueta(e.p.nombre, est, col); e.et.position.set(0, 1.95, .2); e.g.add(e.et);
+  }
+}
+
+// ---------- ficha ----------
+const fichaEl = document.getElementById('ficha'), fichaC = document.getElementById('fichaC');
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function abrirPersona(id) {
+  const d = ((DATOS && DATOS.oficina && DATOS.oficina.equipo) || []).find(e => e.id === id);
+  if (!d) { fichaC.innerHTML = '<h3>' + esc(id) + '</h3><p class="sub">Sin datos todavía.</p>'; fichaEl.style.display = 'block'; return; }
+  const li = (d.tareas || []).map(t => '<li>' + esc(t) + '</li>').join('') || '<li>Sin tareas pendientes</li>';
+  const he = (d.hecho || []).map(h => '<li>' + (h.url ? '<a href="' + esc(h.url) + '" target="_blank" rel="noopener">' + esc(h.t) + '</a>' : esc(h.t)) + (h.f ? ' <span class="f">· ' + esc(fmt.format(new Date(h.f))) + '</span>' : '') + '</li>').join('') || '<li>Nada registrado todavía</li>';
+  fichaC.innerHTML = '<h3>' + esc(d.nombre) + '</h3><div class="sub">' + esc(d.rol) + ' · ' + esc(d.estado) + '</div><div class="ahora">Ahora: ' + esc(d.ahora || '—') + '</div><h4>Sus tareas</h4><ul>' + li + '</ul><h4>Lo último que hizo</h4><ul>' + he + '</ul>';
+  fichaEl.style.display = 'block';
+}
+function abrirOps() {
+  const of = (DATOS && DATOS.oficina) || {}; const px = of.proximas || [];
+  fichaC.innerHTML = '<h3>Centro de operaciones</h3><div class="sub">Lo próximo que sale · hora del centro de México</div>' + (of.alertas || []).map(a => '<div class="ahora">⚠ ' + esc(a) + '</div>').join('') +
+    (px.map(it => '<div class="op"><b>' + esc(fmt.format(new Date(it.cuando))) + '</b><span class="red ' + esc(it.red) + '">' + esc(it.red) + '</span><span>' + esc(it.t) + '</span></div>').join('') || '<p class="sub">Nada programado.</p>');
+  fichaEl.style.display = 'block';
+}
+document.getElementById('cerrar').addEventListener('click', () => { fichaEl.style.display = 'none'; });
+
+// ---------- moverse ----------
+const yo = { x: 0, z: D / 2 - 4, yaw: 0, pitch: -.08 };   // entras por la recepción mirando al open space
+const teclas = {};
+addEventListener('keydown', e => { teclas[e.key.toLowerCase()] = true; if (e.key === 'Escape') fichaEl.style.display = 'none'; });
+addEventListener('keyup', e => { teclas[e.key.toLowerCase()] = false; });
+let arr = null, movio = false;
+const cv = renderer.domElement;
+cv.addEventListener('pointerdown', e => { if (e.pointerType === 'touch' && e.clientX < innerWidth * .4 && e.clientY > innerHeight * .45) return; arr = { x: e.clientX, y: e.clientY, id: e.pointerId }; movio = false; });
+addEventListener('pointermove', e => { if (!arr || e.pointerId !== arr.id) return; const dx = e.clientX - arr.x, dy = e.clientY - arr.y; if (Math.abs(dx) + Math.abs(dy) > 4) movio = true; yo.yaw -= dx * .005; yo.pitch = Math.max(-1, Math.min(.6, yo.pitch - dy * .004)); arr.x = e.clientX; arr.y = e.clientY; });
+addEventListener('pointerup', e => { if (arr && e.pointerId === arr.id && !movio) tocar(e.clientX, e.clientY); if (arr && e.pointerId === arr.id) arr = null; });
+const ray = new THREE.Raycaster();
+function tocar(x, y) {
+  ray.setFromCamera(new THREE.Vector2(x / innerWidth * 2 - 1, -(y / innerHeight) * 2 + 1), camera);
+  const h = ray.intersectObjects(clicables, false)[0]; if (!h) return;
+  if (h.object.userData.tipo === 'ops') abrirOps(); else abrirPersona(h.object.userData.id);
+}
+// joystick táctil
+const joy = document.getElementById('joy'), nub = joy.firstElementChild; let jv = { x: 0, y: 0 }, jid = null;
+if (matchMedia('(pointer: coarse)').matches) { joy.style.display = 'block'; document.getElementById('ayuda').innerHTML = 'Joystick para caminar · arrastra para mirar · toca a alguien'; }
+joy.addEventListener('pointerdown', e => { jid = e.pointerId; joy.setPointerCapture(jid); mover(e); });
+joy.addEventListener('pointermove', e => { if (e.pointerId === jid) mover(e); });
+joy.addEventListener('pointerup', () => { jid = null; jv = { x: 0, y: 0 }; nub.style.transform = ''; });
+function mover(e) { const r = joy.getBoundingClientRect(); let dx = e.clientX - (r.left + 60), dy = e.clientY - (r.top + 60); const L = Math.hypot(dx, dy); if (L > 45) { dx *= 45 / L; dy *= 45 / L; } jv = { x: dx / 45, y: dy / 45 }; nub.style.transform = 'translate(' + dx + 'px,' + dy + 'px)'; }
+document.getElementById('cerca').addEventListener('click', () => { const id = document.getElementById('cerca').dataset.id; if (id === 'ops') abrirOps(); else if (id) abrirPersona(id); });
+
+function choca(x, z) { const r = .3; return SOLIDOS.some(s => x + r > s.minX && x - r < s.maxX && z + r > s.minZ && z - r < s.maxZ); }
+const reloj = new THREE.Clock();
+function loop() {
+  const dt = Math.min(reloj.getDelta(), .05), t = reloj.elapsedTime;
+  let f = 0, s = 0;
+  if (teclas['w'] || teclas['arrowup']) f += 1; if (teclas['s'] || teclas['arrowdown']) f -= 1;
+  if (teclas['a']) s -= 1; if (teclas['d']) s += 1;
+  if (teclas['arrowleft']) yo.yaw += 1.8 * dt; if (teclas['arrowright']) yo.yaw -= 1.8 * dt;
+  f += -jv.y; s += jv.x;
+  const v = 3.2 * dt, sx = Math.sin(yo.yaw), cz = Math.cos(yo.yaw);
+  const nx = yo.x + (-sx * f + cz * s) * v, nz = yo.z + (-cz * f - sx * s) * v;
+  if (!choca(nx, yo.z)) yo.x = nx; if (!choca(yo.x, nz)) yo.z = nz;
+  camera.position.set(yo.x, 1.6, yo.z); camera.rotation.set(yo.pitch, yo.yaw, 0, 'YXZ');
+  brazos.forEach(a => { if (!a.quieto) a.b.position.y = 1.05 + Math.sin(t * 11 + a.fase) * .02; });
+  // ¿a quién tengo cerca?
+  let mejor = null, dm = 2.6;
+  for (const id in etiquetas) { const g = etiquetas[id].g; const d = Math.hypot(g.position.x - yo.x, g.position.z - .2 - yo.z); if (d < dm) { dm = d; mejor = id; } }
+  if (Math.hypot(yo.x, yo.z + D / 2) < 6) mejor = mejor || 'ops';
+  const c = document.getElementById('cerca');
+  if (mejor) { c.dataset.id = mejor; c.textContent = mejor === 'ops' ? 'Ver el centro de operaciones' : 'Ver qué hace ' + etiquetas[mejor].p.nombre.split(' ·')[0]; c.style.display = 'block'; } else c.style.display = 'none';
+  renderer.render(scene, camera); requestAnimationFrame(loop);
+}
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+pintarPantalla(); loop(); document.getElementById('carga').style.display = 'none'; cargar();
+</script>
+</body>
+</html>
