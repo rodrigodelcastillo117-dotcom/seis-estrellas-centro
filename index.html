@@ -1369,6 +1369,44 @@ details.mas > .in > * { min-width: 0; }
       if ((u.areas || []).length) A.append(el('div', 'ovpie', 'En la junta: ' + u.areas.map(function (x) { return nom[x] || x; }).join(', ')));
       JB.append(A);
     }
+    // 19-nov: libro de órdenes del CEO (ordenes.py): cada orden con dueño y check; si falla, junta sola
+    var Or = O.ordenes || null;
+    if (Or && Array.isArray(Or.lista)) {
+      JB.append(el('div', 'ovsub', 'Órdenes del CEO'));
+      JB.append(el('div', 'ovpie', [plural(Or.activas || 0, 'activa', 'activas'), plural(Or.fallando || 0, 'fallando', 'fallando'), plural(Or.abiertas || 0, 'abierta', 'abiertas'),
+        plural(Or.cumpliendo || 0, 'permanente al día', 'permanentes al día'), plural(Or.cumplidas_hoy || 0, 'cumplida hoy', 'cumplidas hoy')].join(' · ') + (Or.t ? ' · revisadas ' + hz(Or.t) : '')));
+      var ulo = el('ul', 'ovl'), ver = Or.lista.filter(function (o) { return o.estado !== 'cumplida' || !o.permanente; }).slice(0, 8);
+      if (!ver.length) ulo.append(el('li', null, '✓ Todas las órdenes al día.'));
+      var venceTxt = function (s) {  // fecha futura: "vence en 5 h"; pasada: "venció hace 2 h"
+        var t = ms(s); if (!t) return ''; var dm = Math.round((t - Date.now()) / 60000);
+        if (dm <= 0) return 'venció ' + hz(s);
+        return 'vence en ' + (dm < 60 ? dm + ' min' : dm < 2880 ? Math.round(dm / 60) + ' h' : Math.round(dm / 1440) + ' días');
+      };
+      ver.forEach(function (o) {
+        var mal = o.estado === 'en_junta' || o.estado === 'fallando', li = el('li');
+        li.append(el('span', mal ? 'mal' : (o.estado === 'cumplida' ? 'ok' : 'q'), (mal ? '✗ ' : o.estado === 'cumplida' ? '✓ ' : '◷ ') + (o.estado === 'en_junta' ? 'en junta' : o.estado) + ' '),
+          document.createTextNode('«' + (o.texto || '') + '» '), el('span', 'f', '· ' + (nom[o.dueno] || o.dueno || '') + (o.permanente ? ' · siempre' : (o.vence ? ' · ' + venceTxt(o.vence) : ''))));
+        if (o.evidencia) { var r = el('span', 'r', '→ ' + o.evidencia); r.title = o.evidencia; li.append(r); }
+        ulo.append(li);
+      });
+      JB.append(ulo);
+    }
+    // 19-nov: autocrítica diaria (ordenes.py autocritica): qué no se hizo, causa y UNA mejora que entra al libro
+    var Au = O.autocritica || null;
+    if (Au && Array.isArray(Au.agentes)) {
+      var fa = Au.agentes.filter(function (a) { return a && a.fallo; });
+      JB.append(el('div', 'ovsub', 'Autocrítica del ' + (Au.fecha || '') + ' · ' + fa.length + ' fallaron · ' + (Au.agentes.length - fa.length) + ' sin fallas'));
+      var ula = el('ul', 'ovl');
+      if (!fa.length) ula.append(el('li', null, '✓ Nadie falló ese día.'));
+      fa.forEach(function (a) {
+        var li = el('li'); li.append(el('span', 'q', (a.nombre || a.agente) + ': '), document.createTextNode((a.debia || [])[0] || ''));
+        if ((a.n || 0) > 1) li.append(el('span', 'f', ' (+' + (a.n - 1) + ')'));
+        if (a.causa) { var c = el('span', 'r', 'Causa: ' + a.causa); c.title = a.causa; li.append(c); }
+        if (a.mejora) { var m = el('span', 'r', 'Mejora: ' + a.mejora + (a.orden_mejora ? ' (orden ' + a.orden_mejora + ')' : '')); m.title = a.mejora; li.append(m); }
+        ula.append(li);
+      });
+      JB.append(ula);
+    }
 
     // becarios: quién los mandó y qué hacen; los últimos que terminaron
     var BB = oBox('ovBec', 'Becarios', act.length ? act.length + ' trabajando' : 'nadie trabajando ahorita');
