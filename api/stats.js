@@ -145,7 +145,11 @@ function conRetencion(y) {
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  if (!process.env.PANEL_PASSWORD || (req.headers["x-panel-key"] || "") !== process.env.PANEL_PASSWORD) {
+  // 19-nov: cada persona entra con SU contraseña (Rodrigo: PANEL_PASSWORD · Carlo: PANEL_PASSWORD_CARLO)
+  const clave = req.headers["x-panel-key"] || "";
+  const USUARIOS = [["Rodrigo", process.env.PANEL_PASSWORD], ["Carlo", process.env.PANEL_PASSWORD_CARLO]];
+  const quien = clave ? USUARIOS.find(([, c]) => c && c === clave) : null;
+  if (!quien) {
     res.statusCode = 401;
     res.end(JSON.stringify({ error: "Contraseña incorrecta" }));
     return;
@@ -168,6 +172,7 @@ module.exports = async (req, res) => {
     if (cuota) y.reintento = new Date(SIN_CUOTA_HASTA).toISOString();
   }
   const out = {
+    usuario: quien[0],
     ahora: new Date().toISOString(),
     yt: conRetencion(Object.assign({}, y)),
     ig: (SNAP && SNAP.ig) || null,

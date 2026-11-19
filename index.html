@@ -405,7 +405,7 @@ details.faltan summary { cursor: pointer; }
       <span class="live"><span class="dot" id="dot"></span><span id="liveTxt">Conectando…</span></span>
       <a class="iconbtn hot" href="/oficina.html">🏢 Oficina 3D</a>
       <button class="iconbtn" id="refreshBtn" type="button" aria-label="Actualizar ahora">↻ Actualizar</button>
-      <button class="iconbtn" id="logoutBtn" type="button">Salir</button>
+      <span id="quienSoy" style="font-size:12px;opacity:.8;margin-right:6px"></span><button class="iconbtn" id="logoutBtn" type="button">Salir</button>
     </div>
   </header>
 
@@ -642,6 +642,7 @@ details.faltan summary { cursor: pointer; }
         if (res.s !== 200) throw new Error(res.j.error || ('Error ' + res.s));
         showApp(); $('errBox').hidden = true; $('dot').className = 'dot pulse';
         lastAt = Date.now(); render(res.j);
+        try { $('quienSoy').textContent = res.j.usuario ? 'Hola, ' + res.j.usuario : ''; } catch (e) {}
         try { localStorage.setItem(LAST, JSON.stringify(res.j)); } catch (e) {}
         setTimeout(function () { $('dot').className = 'dot' + (res.j.yt && res.j.yt.fuente !== 'vivo' ? ' err' : ''); }, 1700);
       })
