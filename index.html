@@ -398,6 +398,8 @@ details.faltan summary { cursor: pointer; }
 .hoyl li.alta { border-color: rgba(255,92,122,.5); background: rgba(255,92,122,.08); }
 .hoyl .pq { font-weight: 600; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .hoyl .pq.todo { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.hoyl .pq.tarea { font-weight: 500; -webkit-line-clamp: 3; cursor: pointer; word-break: break-word; }
+.hoyl .pq.tarea.todo { cursor: auto; }
 .hoyl .rc { margin-top: 4px; font-size: 12px; color: var(--muted); }
 .hoyl .rc b { color: var(--ok); font-weight: 700; }
 .hoyl .cu { display: inline-block; margin-left: 6px; font: 800 10.5px/1.5 var(--body); padding: 0 7px; border-radius: 7px; background: rgba(255,154,60,.16); color: #ffd2a8; white-space: nowrap; vertical-align: 1px; }
@@ -457,6 +459,81 @@ details.faltan summary { cursor: pointer; }
 .prem li > i { font-style: normal; font-size: 18px; line-height: 1.2; text-align: center; }
 .prem b.k { display: block; font: 800 11px var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--orange); }
 .prem .f { color: var(--dim); font-size: 12px; }
+
+/* 19-nov auditoría · lo de arriba se entiende en 5 segundos en el celular */
+.sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
+.fresco { cursor: pointer; }
+.fresco.ok .dot { background: var(--ok); } .fresco.medio .dot { background: var(--warn); box-shadow: 0 0 10px rgba(255,181,71,.8); } .fresco.viejo .dot { background: var(--bad); box-shadow: 0 0 10px rgba(255,92,122,.8); }
+.frescod { flex: 1 1 100%; font-size: 12.5px; color: var(--muted); line-height: 1.45; background: rgba(10,6,22,.45); border: 1px solid var(--line); border-radius: 14px; padding: 9px 12px; display: none; }
+.frescod.on { display: block; }
+.frescod b { color: var(--fg); font-weight: 700; }
+@media (max-width: 640px) {
+  .solo-pc { display: none !important; }
+  header.top { gap: 10px; }
+  header.top img { width: 40px; height: 40px; }
+  header.top h1 { font-size: 26px; }
+  header.top .h { margin-top: 3px; font-size: 13px; }
+  .acts { gap: 6px; flex: 1 1 100%; }
+  .acts .iconbtn { padding: 7px 10px; font-size: 12.5px; }
+  .live { padding: 6px 10px; font-size: 12.5px; }
+  .hoy { padding: 14px; gap: 10px; }
+  .hoyhd h2 { font-size: 18px; }
+  .hoyhd .ovbtn.chico { padding: 7px 12px; font-size: 13px; }
+  #salio, #falla { padding: 14px; }
+  #salio h2, #falla h2, #metasSec h2, #hRedes { font-size: 19px; }
+}
+.res { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 900px) { .res { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.rs { display: grid; gap: 3px; align-content: start; padding: 12px 14px; border-radius: 18px; text-decoration: none; color: var(--fg); background: linear-gradient(160deg, rgba(62, 37, 112, .55), rgba(28, 17, 56, .62)); border: 1px solid var(--line); min-width: 0; }
+.rs .k { font: 800 11px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.rs b { font: 900 26px/1.05 var(--display); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.rs .s { font: 600 12.5px/1.35 var(--body); color: var(--muted); overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.rs.ok { border-color: rgba(61,220,151,.45); } .rs.ok b { color: var(--ok); }
+.rs.mal { border-color: rgba(255,92,122,.55); background: linear-gradient(160deg, rgba(255,92,122,.18), rgba(28,17,56,.62)); } .rs.mal b { color: #ff9db0; }
+.rs.ojo { border-color: rgba(255,181,71,.5); } .rs.ojo b { color: var(--warn); }
+.salg { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .salg { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.pl { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.pl li { display: grid; grid-template-columns: 52px 30px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13px; }
+.pl li:first-child { border-top: 0; padding-top: 0; }
+.pl .hr { font-weight: 800; font-variant-numeric: tabular-nums; }
+.pl .rd { font: 900 10.5px/1.6 var(--body); text-align: center; border-radius: 6px; color: #120a1f; }
+.pl .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl .t a { color: var(--fg); text-decoration: none; }
+.pl .v { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pl .v small { font-weight: 600; color: var(--muted); }
+.plnota { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.falla { border-color: rgba(255,92,122,.35); }
+.fl2 { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.fl2 li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 13.5px; line-height: 1.4; padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid var(--line); overflow-wrap: anywhere; }
+.fl2 li > i { font-style: normal; font-weight: 900; text-align: center; }
+.fl2 li.alta { border-color: rgba(255,92,122,.5); background: rgba(255,92,122,.08); } .fl2 li.alta > i { color: var(--bad); }
+.fl2 li.media > i { color: var(--warn); }
+.fl2 li.ok { color: var(--ok); font-weight: 700; border-color: rgba(61,220,151,.35); }
+.fl2 .q { display: block; font-size: 12px; color: var(--dim); margin-top: 2px; }
+details.mas { border-radius: var(--r); border: 1px solid var(--line); background: rgba(20, 12, 40, .45); }
+details.mas > summary { list-style: none; cursor: pointer; padding: 14px 18px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; font: 800 18px/1.25 var(--display); }
+details.mas > summary::-webkit-details-marker { display: none; }
+details.mas > summary::before { content: "▸"; color: var(--orange); font-size: 16px; transition: transform .15s; }
+details.mas[open] > summary::before { transform: rotate(90deg); }
+details.mas > summary small { font: 500 13px var(--body); color: var(--muted); }
+details.mas > .in { display: grid; gap: 18px; padding: 0 12px 14px; grid-template-columns: minmax(0, 1fr); }
+details.mas > .in > * { min-width: 0; }
+@media (max-width: 520px) { details.mas > summary { padding: 12px 14px; font-size: 16px; } details.mas > .in { padding: 0 6px 10px; } }
+.mt .ven { font-size: 11.5px; color: var(--dim); }
+@media (max-width: 640px) {
+  .mts { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .mt { grid-template-columns: minmax(0, 1fr) auto; column-gap: 10px; row-gap: 4px; padding: 10px 12px; }
+  .mt .rd { grid-column: 1; } .mt .q { grid-column: 1; font-size: 12.5px; }
+  .mt .vv { grid-column: 2; grid-row: 1 / span 2; align-self: center; text-align: right; font-size: 22px; }
+  .mt .vv small { display: block; font-size: 11.5px; }
+  .mt .bar, .mt .pie, .mt .pq, .mt .amb { grid-column: 1 / -1; }
+  .mt .amb { display: none; }
+  .mt.n1 .vv { font-size: 26px; }
+}
+.vv.sd, .big.sd, .sm.sd, .n.sd { color: var(--dim) !important; font-size: .62em; }
+.kpi .v.sd { color: var(--dim); font-size: 24px; }
+.kpi .s.viejo { color: var(--warn); }
 </style>
 </head>
 <body>
@@ -478,15 +555,26 @@ details.faltan summary { cursor: pointer; }
     <img src="https://yt3.ggpht.com/kkIeK65Kc7ja6IfEmdZ1W4j7IlRxJE30Nabjw_ZRkhLdNzOJjxGftIHJCz8WNeuWa0HNamBkSKM=s96-c-k-c0x00ffffff-no-rj" alt="" width="54" height="54">
     <div class="t">
       <h1>Seis Estrellas · <span class="vi">GTA VI</span></h1>
-      <div class="h"><b>Centro de operaciones</b> · <span id="fecha">—</span> · todo en automático · <span id="handle">@seisestrellasmx</span></div>
+      <div class="h"><span id="fecha">—</span><span class="solo-pc"> · <b>Centro de operaciones</b> · hora del centro de México · <span id="handle">@seisestrellasmx</span></span></div>
     </div>
     <div class="acts">
-      <span class="live"><span class="dot" id="dot"></span><span id="liveTxt">Conectando…</span></span>
-      <a class="iconbtn hot" href="/oficina.html">🏢 Oficina 3D</a>
-      <button class="iconbtn" id="refreshBtn" type="button" aria-label="Actualizar ahora">↻ Actualizar</button>
-      <span id="quienSoy" style="font-size:12px;opacity:.8;margin-right:6px"></span><button class="iconbtn" id="logoutBtn" type="button">Salir</button>
+      <span class="live fresco" id="fresco" tabindex="0"><span class="dot" id="dot"></span><span id="liveTxt">Conectando…</span></span>
+      <a class="iconbtn hot" href="/oficina.html">🏢 Oficina<span class="solo-pc"> 3D</span></a>
+      <button class="iconbtn" id="refreshBtn" type="button" aria-label="Actualizar ahora">↻<span class="solo-pc"> Actualizar</span></button>
+      <span id="quienSoy" class="solo-pc" style="font-size:12px;opacity:.8;margin-right:6px"></span><button class="iconbtn" id="logoutBtn" type="button">Salir</button>
     </div>
+    <div class="frescod" id="frescoD"></div>
   </header>
+
+  <div class="card errbox" id="errBox" hidden></div>
+
+  <!-- 19-nov auditoría: lo que el CEO debe ver en 5 segundos (a) qué necesito de ti, (b) metas, (c) qué salió y qué sale, (d) qué falla -->
+  <nav class="res" id="resumen" aria-label="Resumen en 5 segundos">
+    <a class="rs" href="#hoy" id="rsA"><span class="k">Te necesito</span><b>—</b><span class="s">cargando…</span></a>
+    <a class="rs" href="#metasSec" id="rsB"><span class="k">Metas al 31-dic</span><b>—</b><span class="s">cargando…</span></a>
+    <a class="rs" href="#salio" id="rsC"><span class="k">Hoy en las redes</span><b>—</b><span class="s">cargando…</span></a>
+    <a class="rs" href="#falla" id="rsD"><span class="k">Qué está fallando</span><b>—</b><span class="s">cargando…</span></a>
+  </nav>
 
   <section class="card glow pk hoy" id="hoy" aria-labelledby="hHoy">
     <div class="hoyhd">
@@ -501,11 +589,38 @@ details.faltan summary { cursor: pointer; }
     <div class="mts" id="metas"><div class="card empty">Cargando…</div></div>
   </section>
 
-  <section class="card" aria-labelledby="hEmb" id="embSec">
-    <h2 id="hEmb">Embudo <small>vistas → visitas al perfil → seguidores · dónde se nos va la gente</small></h2>
-    <div class="embg" id="emb"><div class="empty">Cargando…</div></div>
+  <section class="card" aria-labelledby="hSalio" id="salio">
+    <h2 id="hSalio">Qué salió hoy y qué sale <small id="salioSub">hora del centro de México</small></h2>
+    <div class="salg">
+      <div class="ovbox"><h3>Salió hoy <small id="salioN"></small></h3><div id="salioHoy"><div class="empty">Cargando…</div></div></div>
+      <div class="ovbox"><h3>Lo que sale <small>próximas publicaciones</small></h3><div id="saleLuego"><div class="empty">Cargando…</div></div></div>
+    </div>
   </section>
 
+  <section class="card falla" aria-labelledby="hFalla" id="falla">
+    <h2 id="hFalla">Qué está fallando <span class="cnt" id="fallaN">—</span></h2>
+    <ul class="fl2" id="fallaL"><li class="empty">Cargando…</li></ul>
+    <div class="avisos" id="avisos" hidden></div>
+  </section>
+
+  <section aria-labelledby="hRedes">
+    <h2 id="hRedes">Las 4 redes <small>seguidores y vistas en total · cambio en las últimas 24 h</small></h2>
+    <div class="redes" id="redes" aria-label="Las cuatro redes"></div>
+  </section>
+
+  <details class="mas" id="mEmb">
+    <summary><span>Embudo</span> <small>vistas → visitas al perfil → seguidores: dónde se nos va la gente</small></summary>
+    <div class="in">
+  <section class="card" aria-labelledby="hEmb" id="embSec">
+    <h2 id="hEmb" class="sr">Embudo</h2>
+    <div class="embg" id="emb"><div class="empty">Cargando…</div></div>
+  </section>
+    </div>
+  </details>
+
+  <details class="mas" id="mOv">
+    <summary><span>El equipo en vivo</span> <small id="mOvSub">quién trabaja, quién está atorado, becarios y juntas</small></summary>
+    <div class="in">
   <section class="card glow pk ov" id="ov" aria-labelledby="hOv">
     <div class="ovhd">
       <div style="min-width:0">
@@ -535,17 +650,17 @@ details.faltan summary { cursor: pointer; }
     </div>
     <p class="ovpie" id="ovPie">Sale de la misma foto que arma la oficina (cada hora). TRABAJANDO = su turno arrancó hace menos de 25 min y todavía no deja registro. XP de los últimos 7 días: +10 por entrega, −30 por error; cada 100 XP sube un nivel.</p>
   </section>
+    </div>
+  </details>
 
-  <div class="card errbox" id="errBox" hidden></div>
-  <div class="avisos" id="avisos"></div>
-
+  <details class="mas" id="mFab">
+    <summary><span>La fábrica de clips</span> <small id="mFabSub">qué se está haciendo, qué está listo y qué ya salió</small></summary>
+    <div class="in">
   <section class="fk" aria-label="La fábrica de clips en números">
-    <div class="card glow pk"><div class="k">Clips hoy</div><div class="v skel" id="fHoy">0</div><div class="s mu" id="fHoyS">&nbsp;</div></div>
+    <div class="card glow pk"><div class="k">Clips nuevos hoy</div><div class="v skel" id="fHoy">0</div><div class="s mu" id="fHoyS">&nbsp;</div></div>
     <div class="card glow"><div class="k">En cola</div><div class="v skel" id="fCola">0</div><div class="s mu" id="fColaS">&nbsp;</div></div>
-    <div class="card glow cy"><div class="k">Clips esta semana</div><div class="v skel" id="fSem">00</div><div class="s up" id="fSemS">4 cuentas</div></div>
+    <div class="card glow cy"><div class="k">Clips en 7 días</div><div class="v skel" id="fSem">00</div><div class="s up" id="fSemS">4 cuentas</div></div>
   </section>
-
-  <section class="redes" id="redes" aria-label="Las cuatro redes"></section>
 
   <section class="fab" aria-label="La fábrica">
     <div class="glass glow pk now" id="now">
@@ -571,10 +686,15 @@ details.faltan summary { cursor: pointer; }
   </section>
 
   <section aria-labelledby="hPubl">
-    <div class="lbl" id="hPubl">Publicados <span class="n" id="publN">0</span> <span style="text-transform:none;letter-spacing:0;font-weight:600">vistas sumadas de las 4 redes</span></div>
+    <div class="lbl" id="hPubl">Publicados <span class="n" id="publN">0</span> <span style="text-transform:none;letter-spacing:0;font-weight:600">vistas totales de cada clip, sumando las 4 redes</span></div>
     <div class="carr" id="publ" tabindex="0" aria-label="Videos publicados con sus vistas por red"><div class="vacio2">Cargando…</div></div>
   </section>
+    </div>
+  </details>
 
+  <details class="mas" id="mOf">
+    <summary><span>La oficina, el calendario de las 4 redes y el camino a monetizar</span></summary>
+    <div class="in">
   <section aria-labelledby="hOf">
     <h2 id="hOf">La oficina <small>toca a alguien para ver qué hace</small></h2>
     <div class="oficina" id="oficina"><div class="card empty">Cargando…</div></div>
@@ -588,26 +708,31 @@ details.faltan summary { cursor: pointer; }
       <div id="ops"><div class="empty">Cargando…</div></div>
     </section>
     <section class="card glow mon-c" aria-labelledby="hMon">
-      <h2 id="hMon">Camino a monetizar <small>metas de cada red</small></h2>
+      <h2 id="hMon">Camino a monetizar <small>requisitos de cada red · en total</small></h2>
       <div id="mon"><div class="empty">Cargando…</div></div>
       <div class="cfo" id="cfo"></div>
     </section>
   </div>
+    </div>
+  </details>
 
+  <details class="mas" id="mDet">
+    <summary><span>Detalle por red</span> <small>YouTube, Instagram, Facebook y TikTok, video por video</small></summary>
+    <div class="in">
   <section aria-labelledby="hRes">
     <h2 id="hRes">Detalle por plataforma</h2>
     <div class="plats" id="plats"><div class="card empty">Cargando…</div></div>
   </section>
 
-  <h2 style="margin:6px 0 -6px">YouTube</h2>
+  <h2 style="margin:6px 0 -6px">YouTube <small id="ytSub"></small></h2>
 
   <section class="kpis" aria-label="Números del canal">
-    <div class="card kpi hl"><div class="l">Suscriptores</div><div class="v skel" id="kSubs">000</div><div class="s">en el canal</div></div>
-    <div class="card kpi"><div class="l">Vistas</div><div class="v skel" id="kViews">000</div><div class="s">de todos los videos</div></div>
-    <div class="card kpi"><div class="l">Likes</div><div class="v skel" id="kLikes">000</div><div class="s" id="kLikesS">en total</div></div>
-    <div class="card kpi"><div class="l">Comentarios</div><div class="v skel" id="kComments">000</div><div class="s">en total</div></div>
-    <div class="card kpi"><div class="l">Publicados</div><div class="v skel" id="kPub">00</div><div class="s">ya al aire</div></div>
-    <div class="card kpi"><div class="l">Programados</div><div class="v skel" id="kProg">00</div><div class="s">esperando su hora</div></div>
+    <div class="card kpi hl"><div class="l">Suscriptores</div><div class="v skel" id="kSubs">000</div><div class="s" id="kSubsS">total</div></div>
+    <div class="card kpi"><div class="l">Vistas</div><div class="v skel" id="kViews">000</div><div class="s" id="kViewsS">total de los publicados</div></div>
+    <div class="card kpi"><div class="l">Likes</div><div class="v skel" id="kLikes">000</div><div class="s" id="kLikesS">total</div></div>
+    <div class="card kpi"><div class="l">Comentarios</div><div class="v skel" id="kComments">000</div><div class="s" id="kCommentsS">total</div></div>
+    <div class="card kpi"><div class="l">Publicados</div><div class="v skel" id="kPub">00</div><div class="s" id="kPubS">al aire ahora</div></div>
+    <div class="card kpi"><div class="l">Programados</div><div class="v skel" id="kProg">00</div><div class="s" id="kProgS">esperando su hora</div></div>
     <div class="card kpi"><div class="l">% visto promedio</div><div class="v skel" id="kAvg">000</div><div class="s" id="kAvgS">YouTube Analytics</div></div>
     <div class="card kpi"><div class="l">Mejor Short</div><div class="v skel" id="kBest">000</div><div class="s" id="kBestS">vistas</div></div>
   </section>
@@ -618,7 +743,7 @@ details.faltan summary { cursor: pointer; }
       <div class="next" id="next"><div class="empty">Cargando…</div></div>
     </section>
     <section class="card" aria-labelledby="hPerf">
-      <h2 id="hPerf">Rendimiento <small>publicados, por vistas · % = promedio visto</small></h2>
+      <h2 id="hPerf">Rendimiento <small>publicados, vistas totales · % = promedio visto</small></h2>
       <div class="bars" id="bars"><div class="empty">Cargando…</div></div>
     </section>
   </div>
@@ -640,7 +765,12 @@ details.faltan summary { cursor: pointer; }
     <h2 id="hCal">Calendario de YouTube <small>hora del centro de México</small></h2>
     <div id="cal"><div class="empty">Cargando…</div></div>
   </section>
+    </div>
+  </details>
 
+  <details class="mas" id="mAuto">
+    <summary><span>Automatización y enlaces</span></summary>
+    <div class="in">
   <div class="cols">
     <section class="card" aria-labelledby="hAuto">
       <h2 id="hAuto">Automatización</h2>
@@ -659,9 +789,11 @@ details.faltan summary { cursor: pointer; }
       </div>
     </section>
   </div>
+    </div>
+  </details>
 
   <details class="faltan" id="faltanBox" hidden><summary id="faltanSum">Métricas que no se pudieron leer</summary><ul id="faltanList"></ul></details>
-  <footer>YouTube: en vivo cada 10 min (si se acaba la cuota, feed público de YouTube) · Instagram, Facebook, TikTok y la fábrica: foto que se actualiza cada hora (y cada 10 min mientras hay renders) · este panel se recarga solo cada minuto</footer>
+  <footer>De dónde sale cada número: YouTube en vivo cada 10 min (sin cuota: vistas y likes del feed público, suscriptores de la página del canal) · Instagram, Facebook, TikTok, metas y equipo: foto que se toma cada hora · hora del centro de México · el panel se recarga solo cada minuto</footer>
 </main>
 
 <script>
@@ -685,7 +817,9 @@ details.faltan summary { cursor: pointer; }
   try { key = localStorage.getItem(KEY); } catch (e) {}
 
   var nf = new Intl.NumberFormat('es-MX');
-  var fmtNum = function (n) { return (n === null || n === undefined || n === '') ? '—' : nf.format(n); };
+  // 19-nov auditoría: un número que no llegó dice "sin dato" (nunca 0 ni un guion que parezca cero)
+  var SD = 'sin dato';
+  var fmtNum = function (n) { return (n === null || n === undefined || n === '' || (typeof n === 'number' && !isFinite(n))) ? SD : nf.format(n); };
   var fmtSigned = function (n) { return (n > 0 ? '+' : n < 0 ? '−' : '±') + nf.format(Math.abs(n)); };
   var fmtDay = new Intl.DateTimeFormat('es-MX', { timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long' });
   var fmtHr = new Intl.DateTimeFormat('es-MX', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hour12: false });
@@ -694,7 +828,7 @@ details.faltan summary { cursor: pointer; }
   var dayKey = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' });
 
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-  function setNum(id, v) { var e = $(id); e.classList.remove('skel'); e.textContent = v; }
+  function setNum(id, v) { var e = $(id); e.classList.remove('skel'); e.classList.toggle('sd', v === SD); e.textContent = v; }
   function hace(iso) {
     if (!iso) return 'sin fecha';
     var s = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 1000));
@@ -717,10 +851,20 @@ details.faltan summary { cursor: pointer; }
   }
   function seg(ms) { return ms ? (ms / 1000).toFixed(1) + ' s' : '—'; }
   function sum(a, k) { return a.reduce(function (s, v) { return s + (Number(v[k]) || 0); }, 0); }
+  // suma que respeta "sin dato": si NINGUNO trae el dato, el total es null (no 0)
+  function sumN(a, f) { var hay = false, t = 0; a.forEach(function (v) { var x = typeof f === 'function' ? f(v) : v[f]; if (x !== null && x !== undefined && isFinite(x)) { hay = true; t += Number(x); } }); return hay ? t : null; }
+  // 19-nov auditoría: UNA cifra de vistas por video de Facebook en todo el panel (con repeticiones, como Instagram y los Shorts)
+  function fbVis(x) { return x.vistas != null ? x.vistas : (x.plays != null ? x.plays : (x.v != null ? x.v : null)); }
+  function esShort(v) { return !(v.dur && v.dur > 180); }
+  // un programado cuya hora ya pasó y no salió no es "programado"; uno retirado (privado/reemplazado) no es "publicado"
+  function vencido(v) { return v.priv !== 'public' && v.priv !== 'retirado' && !!(v.no_salio || (v.prog && Date.parse(v.prog) < Date.now() - 20 * 60000)); }
+  function programadoVivo(v) { return v.priv !== 'public' && v.priv !== 'retirado' && v.prog && !vencido(v); }
   function imgUrl(p, ver) { return p ? '/' + p + (ver ? '?v=' + encodeURIComponent(ver) : '') : null; }
 
   function estado(v) {
     if (v.priv === 'public') return { txt: 'Publicado', cls: 'pub', at: v.pub };
+    if (v.priv === 'retirado') return { txt: 'Retirado (ya no es público)', cls: 'priv', at: v.pub || v.prog };
+    if (v.prog && vencido(v)) return { txt: 'No salió', cls: 'priv', at: v.prog };
     if (v.prog) return { txt: 'Programado', cls: 'prog', at: v.prog };
     if (v.proc && v.proc !== 'processed' && v.proc !== 'uploaded') return { txt: 'Procesando', cls: 'proc', at: null };
     return { txt: v.priv === 'unlisted' ? 'No listado' : 'Privado', cls: 'priv', at: null };
@@ -798,28 +942,30 @@ details.faltan summary { cursor: pointer; }
   function renderRedes(d, F) {
     var y = d.yt || {}, ig = d.ig || {}, fb = d.fb || {}, tt = d.tt || (d.ig && d.ig._tt) || {};
     var S = (F && F.series) || {};
-    var vids = y.videos || [], reels = ig.reels || [], fbv = fb.videos || [], ttv = tt.videos || [];
+    // 19-nov auditoría: solo cuentan los videos PÚBLICOS (los retirados ya no suman) y Facebook con la misma cifra que el resto del panel
+    var vids = (y.videos || []).filter(function (v) { return v.priv === 'public'; }), reels = ig.reels || [], fbv = (fb.videos || []).filter(function (x) { return x.pub !== false; }), ttv = tt.videos || [];
+    var ttc = tt.cuenta || {};
     var now = {
-      yt: { seg: y.canal && y.canal.subs, v: sum(vids, 'v'), segN: 'suscriptores' },
-      ig: { seg: ig.cuenta && ig.cuenta.seg, v: sum(reels, 'v'), segN: 'seguidores' },
-      fb: { seg: fb.pagina && fb.pagina.seg, v: fbv.reduce(function (s, x) { return s + (Number(x.plays != null ? x.plays : x.v) || 0); }, 0), segN: 'seguidores' },
-      tt: { seg: tt.cuenta && tt.cuenta.seg, v: ttv.length ? sum(ttv, 'v') : null, segN: 'seguidores' }
+      yt: { seg: y.canal && y.canal.subs, v: sumN(vids, 'v'), segN: 'suscriptores' },
+      ig: { seg: ig.cuenta && ig.cuenta.seg, v: sumN(reels, 'v'), segN: 'seguidores' },
+      fb: { seg: fb.pagina && fb.pagina.seg, v: sumN(fbv, fbVis), segN: 'seguidores' },
+      tt: { seg: ttc.seg, v: ttc.vistas !== undefined ? ttc.vistas : sumN(ttv, 'v'), segN: 'seguidores' }
     };
     var R = $('redes'); R.replaceChildren();
     ['yt', 'ig', 'fb', 'tt'].forEach(function (k) {
       var c = el('div', 'card red4'), s = S[k] || {}, n = now[k];
       var hd = el('div', 'hd'), i = el('i'); i.style.background = RED[k].c; i.style.color = RED[k].c; hd.append(i, document.createTextNode(RED[k].n));
       var row = el('div', 'row');
-      var a = el('div'); a.append(el('span', 'big', fmtNum(n.seg)), el('span', 'u', n.segN));
-      var b = el('div'); b.append(el('span', 'sm', fmtNum(n.v)), el('span', 'u', 'vistas'));
+      var a = el('div'), sa = fmtNum(n.seg); a.append(el('span', 'big' + (sa === SD ? ' sd' : ''), sa), el('span', 'u', n.segN + ' · total'));
+      var b = el('div'), sb = fmtNum(n.v); b.append(el('span', 'sm' + (sb === SD ? ' sd' : ''), sb), el('span', 'u', 'vistas · total'));
       row.append(a, b);
       c.append(hd, row);
       var ref = s.ref, d0;
       if (ref && n.v != null && ref[1] != null) {
         var dv = n.v - ref[1], ds = (n.seg != null && ref[2] != null) ? n.seg - ref[2] : null;
-        var cuando = s.ref_es_ayer ? 'sobre ayer' : 'desde las ' + fmtHr.format(new Date(ref[0]));
+        var cuando = s.ref_es_ayer ? 'en 24 h' : 'desde ' + (dayKey.format(new Date(ref[0])) === dayKey.format(new Date()) ? 'las ' : 'ayer ') + fmtHr.format(new Date(ref[0]));
         d0 = el('div', 's d ' + (dv > 0 || ds > 0 ? 'up' : 'mu'), fmtSigned(dv) + ' vistas' + (ds ? ' · ' + fmtSigned(ds) + ' ' + n.segN : '') + ' ' + cuando);
-      } else d0 = el('div', 's d mu', k === 'tt' && n.v == null ? 'Publer aún no entrega métricas' : 'sin historial todavía');
+      } else d0 = el('div', 's d mu', k === 'tt' && n.v == null ? 'vistas: sin dato (Publer todavía no las entrega)' : 'sin historial todavía');
       c.append(d0, spark(s.puntos ? s.puntos.map(function (p) { return [p[0], p[1]]; }) : [], RED[k].c));
       R.append(c);
     });
@@ -932,15 +1078,23 @@ details.faltan summary { cursor: pointer; }
     }
   }
 
-  function plat(nombre, color, nums, best, act, horasViejo) {
+  function plat(nombre, color, nums, best, act, horasViejo, nota) {
     var c = el('div', 'card plat');
     var h = el('h3'); var i = el('i'); i.style.background = color; h.append(i, document.createTextNode(nombre)); c.append(h);
     var g = el('div', 'nums');
-    nums.forEach(function (n) { var d = el('div'); d.append(el('div', 'n', n[1]), el('div', 'k', n[0])); g.append(d); });
+    nums.forEach(function (n) { var d = el('div'); d.append(el('div', 'n' + (n[1] === SD ? ' sd' : ''), n[1]), el('div', 'k', n[0])); g.append(d); });
     c.append(g);
     if (best) { var b = el('div', 'best'); b.append(document.createTextNode('Mejor: '), el('b', null, best[0]), document.createTextNode(' · ' + best[1])); c.append(b); }
-    c.append(el('div', 'when' + (viejo(act, horasViejo) ? ' viejo' : ''), 'Datos ' + hace(act)));
+    c.append(el('div', 'when' + (viejo(act, horasViejo) ? ' viejo' : ''), act ? 'Datos de ' + hace(act) + (act ? ' (' + fmtHr.format(new Date(act)) + ')' : '') : 'Datos: ' + SD));
+    if (nota) c.append(el('div', 'when', nota));
     return c;
+  }
+  // 19-nov auditoría: el "hoy" de Instagram es su día (empieza a medianoche de California = 02:00 CDMX), no el de México
+  function igHoyTxt(ig) {
+    var t = ig && ig.hoy_desde ? Date.parse(ig.hoy_desde) : null;
+    if (!t) return 'Vistas del día (día de Instagram)';
+    var mismo = dayKey.format(new Date(t)) === dayKey.format(new Date());
+    return 'Vistas desde ' + (mismo ? 'las ' : 'ayer ') + fmtHr.format(new Date(t));
   }
 
   // ---------- la oficina (open space; personajes de bloques dibujados aquí, sentados en su escritorio) ----------
@@ -1132,6 +1286,10 @@ details.faltan summary { cursor: pointer; }
     var vs = todos.map(function (a, i) { return { a: a, v: vivoDe(a, todos), i: i }; });
     vs.sort(function (x, y) { return (ORDEN[x.v.clave] - ORDEN[y.v.clave]) || (x.i - y.i); });
     var cuenta = {}; vs.forEach(function (x) { cuenta[x.v.clave] = (cuenta[x.v.clave] || 0) + 1; });
+    RES.ov = { atorados: vs.filter(function (x) { return x.v.est === 'bloqueado'; }).map(function (x) { return { nombre: x.a.nombre || x.a.id, por: x.a.bloqueo || '' }; }),
+               atrasados: vs.filter(function (x) { return x.v.est === 'atrasado'; }).map(function (x) { return { nombre: x.a.nombre || x.a.id, por: x.a.motivo || '' }; }),
+               cicloAtorados: ((O.ciclo || {}).atorados || []).length };
+    $('mOvSub').textContent = [(cuenta.trabajando || 0) + ' trabajando', (cuenta.bloqueado || 0) + ' atorados', (cuenta.atrasado || 0) + ' atrasados', act.length + ' becarios'].join(' · ');
     var R = $('ovRes'); R.replaceChildren();
     [['trabajando', 'trabajando', 'trabajando'], ['bloqueado', 'atorado', 'atorados'], ['atrasado', 'atrasado', 'atrasados'], ['acaba', 'acaba de terminar', 'acaban de terminar'], ['espera', 'en espera', 'en espera'], ['medio', 'de medio tiempo', 'de medio tiempo']].forEach(function (k) {
       var n = cuenta[k[0]] || 0; if (!n && (k[0] === 'acaba' || k[0] === 'medio')) return;
@@ -1285,6 +1443,14 @@ details.faltan summary { cursor: pointer; }
     var p = partesCDMX(Date.now());
     return new RegExp('(^|[^0-9])' + p.d + ' ' + MESES[p.mo - 1]).test(s);
   }
+  // 19-nov auditoría: una tarea larga (p. ej. 18 links) se ve en 3 renglones; tocándola se abre completa
+  function tareaCEO(t) {
+    var c = el('div'), tx = el('div', 'pq tarea', t.t);
+    if (t.cuando) c.append(el('span', 'cu', t.cuando));
+    c.prepend(tx);
+    if (String(t.t).length > 160) { tx.title = 'Toca para ver todo'; tx.tabIndex = 0; var f = function () { tx.classList.toggle('todo'); }; tx.addEventListener('click', f); tx.addEventListener('keydown', function (e) { if (e.key === 'Enter') f(); }); }
+    return c;
+  }
   function caja(titulo, sub) { var B = el('div', 'ovbox'), h = el('h3', null, titulo); if (sub) h.append(el('small', null, sub)); B.append(h); return B; }
 
   function renderHoy(d) {
@@ -1295,11 +1461,14 @@ details.faltan summary { cursor: pointer; }
     var avs = (Array.isArray(O.avisos) ? O.avisos : []).filter(function (a) {
       var t = a && ms(a.t); return t && a.texto && ahora - t < 24 * 3600e3 && !/^prueba( \d+)?:/i.test(String(a.texto).trim());
     }).sort(function (x, y) { return ms(y.t) - ms(x.t); }).slice(0, 3);
-    var n = decs.length + hoyT.length + avs.length;
+    // 19-nov auditoría: el número cuenta solo lo que TÚ tienes que hacer (decidir + tareas de hoy). Los avisos que ya te llegaron
+    // al celular son informativos (algunos ya resueltos): van abajo, plegados, y no inflan el número.
+    var n = decs.length + hoyT.length;
     $('hoyN').textContent = n;
+    RES.a = { n: n, decs: decs.length, tareas: hoyT.length, luego: luego.length, sinFoto: !d.oficina_vivo };
     var B = $('hoyCuerpo'); B.replaceChildren();
     if (!n && !d.oficina_vivo) B.append(el('div', 'empty', 'Todavía no llega la foto de la oficina (cada hora): aquí aparecerán tus decisiones, tareas y avisos.'));
-    else if (!n) B.append(el('div', 'hoyvacio', 'Nada pendiente: todo va solo.'));
+    else if (!n) B.append(el('div', 'hoyvacio', 'Nada pendiente para ti hoy: todo va solo.'));
     else {
       var G = el('div', 'hoyg');
       if (decs.length) {
@@ -1320,24 +1489,26 @@ details.faltan summary { cursor: pointer; }
       }
       if (hoyT.length) {
         var H = caja('Haz hoy', 'cosas que la API no deja hacer'), ul = el('ol', 'hoyl haz');
-        hoyT.forEach(function (t, i) { var li = el('li'); li.append(el('i', null, String(i + 1))); var c = el('div', null, t.t); if (t.cuando) c.append(el('span', 'cu', t.cuando)); li.append(c); ul.append(li); });
+        hoyT.forEach(function (t, i) { var li = el('li'); li.append(el('i', null, String(i + 1))); li.append(tareaCEO(t)); ul.append(li); });
         H.append(ul); G.append(H);
       }
-      if (avs.length) {
-        var A = caja('Avisos de la oficina', 'últimas 24 h'), ua = el('ul', 'hoyl av');
-        avs.forEach(function (a) {
-          var li = el('li', a.prioridad === 'alta' ? 'alta' : null); li.append(el('i', null, a.prioridad === 'alta' ? '!' : 'i'));
-          var c = el('div'), tx = el('div', 'pq', a.texto); tx.title = a.texto; c.append(tx, el('span', 'f', hz(a.t))); li.append(c); ua.append(li);
-        });
-        A.append(ua); G.append(A);
-      }
       B.append(G);
+    }
+    if (avs.length) {
+      var A = el('details'); A.style.marginTop = '12px';
+      A.append(el('summary', null, 'Avisos que te llegaron al celular (últimas 24 h): ' + avs.length));
+      var ua = el('ul', 'hoyl av');
+      avs.forEach(function (a) {
+        var li = el('li', a.prioridad === 'alta' ? 'alta' : null); li.append(el('i', null, a.prioridad === 'alta' ? '!' : 'i'));
+        var c = el('div'), tx = el('div', 'pq', a.texto); tx.title = a.texto; c.append(tx, el('span', 'f', hz(a.t))); li.append(c); ua.append(li);
+      });
+      A.append(ua); B.append(A);
     }
     if (luego.length) {
       var dt2 = el('details'); dt2.style.marginTop = '12px';
       dt2.append(el('summary', null, 'Sin prisa (' + luego.length + ')'));
       var u2 = el('ol', 'hoyl haz');
-      luego.forEach(function (t, i) { var li = el('li'); li.append(el('i', null, String(i + 1))); var c = el('div', null, t.t); if (t.cuando) c.append(el('span', 'cu', t.cuando)); li.append(c); u2.append(li); });
+      luego.forEach(function (t, i) { var li = el('li'); li.append(el('i', null, String(i + 1))); li.append(tareaCEO(t)); u2.append(li); });
       dt2.append(u2); B.append(dt2);
     }
   }
@@ -1346,7 +1517,11 @@ details.faltan summary { cursor: pointer; }
     var M = O && O.metas, box = $('metas'), sub = $('metasSub');
     box.replaceChildren(); sub.textContent = '';
     var lista = (M && Array.isArray(M.lista)) ? M.lista.filter(function (m) { return m && m.que; }) : [];
+    RES.b = null;
     if (!lista.length) { box.append(el('div', 'card empty', 'Las metas llegan con la próxima foto del panel (cada hora).')); return; }
+    var conRitmo = lista.filter(function (m) { return m.ritmo; }), adel = conRitmo.filter(function (m) { return m.ritmo === 'adelantado'; }).length;
+    var conv = lista.filter(function (m) { return m.id === 'conversion'; })[0];
+    RES.b = { conv: conv, n: lista.length, adel: adel, atras: conRitmo.length - adel, conRitmo: conRitmo.length };
     var lim = M.fecha_limite ? ms(M.fecha_limite + 'T23:59:00-06:00') : null;
     if (lim) {
       // días de calendario en el centro de México (hoy 18-nov → 31-dic = 43 días)
@@ -1362,7 +1537,7 @@ details.faltan summary { cursor: pointer; }
       if (uno) { var u = el('span', 'uno', '#1'); u.style.marginLeft = 'auto'; rd.append(u); }
       c.append(rd, el('div', 'q', m.que));
       var vv;
-      if (m.hoy === null || m.hoy === undefined) vv = el('div', 'vv sd', 'sin dato');
+      if (m.hoy === null || m.hoy === undefined) { vv = el('div', 'vv sd', SD); vv.append(el('small', null, (m.menor_es_mejor ? ' · meta ' : ' / ') + fmtNum(m.meta) + (m.unidad ? ' ' + m.unidad : ''))); }
       else { vv = el('div', 'vv', fmtNum(m.hoy)); vv.append(el('small', null, (m.menor_es_mejor ? ' · meta ' : ' / ') + fmtNum(m.meta) + (m.unidad ? ' ' + m.unidad : ''))); }
       c.append(vv);
       var ex = [];
@@ -1375,7 +1550,8 @@ details.faltan summary { cursor: pointer; }
       b.setAttribute('role', 'progressbar'); b.setAttribute('aria-valuemin', '0'); b.setAttribute('aria-valuemax', '100'); b.setAttribute('aria-label', m.que);
       if (p !== null) b.setAttribute('aria-valuenow', Math.round(p));
       c.append(b);
-      var pie = el('div', 'pie'); pie.append(el('span', null, p === null ? 'avance: sin dato' : pctTxt(p) + ' del camino'));
+      var pie = el('div', 'pie'); pie.append(el('span', null, (p === null ? 'avance: sin dato' : pctTxt(p) + ' del camino') + (m.ventana ? ' · ' + m.ventana : '')));
+      if (m.fuente) pie.title = 'Fuente: ' + m.fuente;
       if (m.ritmo === 'adelantado') pie.append(el('span', 'rit ad', 'va adelantado'));
       else if (m.ritmo === 'atrasado') pie.append(el('span', 'rit at', 'va atrasado'));
       c.append(pie);
@@ -1420,8 +1596,10 @@ details.faltan summary { cursor: pointer; }
       if (fuga) { r.className = 'embr fuga'; r.append(el('div', 'embc', '⚠ La fuga está en ' + NOM[fuga[0].k] + ' → ' + NOM[fuga[1].k] + ': ' + cadena.join(' → ') + '.')); }
       var notas = [];
       if (f.vistas === 0) notas.push('Sin vistas todavía: no hay embudo que medir.');
+      if (f.vistas === null || f.vistas === undefined) notas.push('Vistas: sin dato' + (f.nota ? ' (' + f.nota + ')' : '') + '.');
       if (w !== 'total' && f.seguidores_total != null && pasos.length > 1) notas.push('Vistas y visitas: últimos ' + w + '; seguidores: total de la cuenta.');
       if (f.seguidores_nuevos !== null && f.seguidores_nuevos !== undefined) notas.push(f.red + ' reporta ' + plural(f.seguidores_nuevos, 'seguidor nuevo', 'seguidores nuevos') + ' en esos ' + w + '.');
+      else if (f.red === 'Instagram') notas.push('Seguidores nuevos en ' + w + ': sin dato (Instagram no lo da a cuentas con menos de 100 seguidores).');
       if (f.toques_link_bio !== null && f.toques_link_bio !== undefined) notas.push('Toques al link de la bio: ' + fmtNum(f.toques_link_bio) + '.');
       if (f.por_1000 !== null && f.por_1000 !== undefined && f.vistas) notas.push(nf2.format(f.por_1000) + ' seguidores por cada 1,000 vistas' + (metaConv != null ? ' (meta: ' + fmtNum(metaConv) + ')' : '') + '.');
       if (notas.length) r.append(el('div', 'embn', notas.join(' ')));
@@ -1433,15 +1611,11 @@ details.faltan summary { cursor: pointer; }
     datosAct = d;
     var y = d.yt || {}, ig = d.ig || {}, fb = d.fb || {};
     var vids = y.videos || [];
+    // 19-nov auditoría: "publicado" = público AHORA (los retirados/privados ya no cuentan) · "programado" = su hora no ha pasado
     var pub = vids.filter(function (v) { return v.priv === 'public'; });
-    var prog = vids.filter(function (v) { return v.priv !== 'public' && v.prog; });
+    var prog = vids.filter(programadoVivo);
     var F = d.fabrica || null;
-
-    var av = $('avisos'); av.replaceChildren();
-    if (y.aviso) av.append(el('div', 'aviso', 'YouTube: ' + y.aviso + (y.reintento ? ' Vuelve a leer en vivo después de las ' + fmtHr.format(new Date(y.reintento)) + '.' : '')));
-    if (ig.error) av.append(el('div', 'aviso', 'Instagram: ' + ig.error));
-    if (fb.error) av.append(el('div', 'aviso', 'Facebook: ' + fb.error));
-    if (d.foto && viejo(d.foto, 3)) av.append(el('div', 'aviso', 'La foto de Instagram, Facebook, TikTok y la fábrica es de ' + hace(d.foto) + '. Se actualiza cada hora; si sigue así, revisa la tarea de cada hora.'));
+    RES = { a: null, b: null, c: null, d: null };
 
     try { renderHoy(d); } catch (e) { console.warn('lo que necesito de ti hoy', e); }
     try { renderMetas(d.oficina_vivo); } catch (e) { console.warn('metas', e); }
@@ -1449,53 +1623,69 @@ details.faltan summary { cursor: pointer; }
     try { renderOV(d); } catch (e) { console.warn('oficina en vivo', e); }
     try { renderFabrica(F, F && F.act); } catch (e) { console.warn('fabrica', e); }
     try { renderRedes(d, F); } catch (e) { console.warn('redes', e); }
-    renderOficina(d.oficina || (d.ig && d.ig._of));
+    try { renderOficina(d.oficina || (d.ig && d.ig._of)); } catch (e) { console.warn('oficina', e); }
     try { renderMon(d.oficina); } catch (e) { console.warn('mon', e); }
+    try { renderSalio(d); } catch (e) { console.warn('salió hoy', e); }
+    try { renderFalla(d); } catch (e) { console.warn('qué falla', e); }
+    try { renderResumen(); } catch (e) { console.warn('resumen', e); }
 
     var reels = ig.reels || [], fbv = (fb.videos || []).filter(function (x) { return x.pub !== false; });
-    var ytBest = pub.slice().sort(function (a, b) { return (b.v || 0) - (a.v || 0); })[0];
+    var shorts = pub.filter(esShort);
+    var ytBest = shorts.slice().sort(function (a, b) { return (b.v || 0) - (a.v || 0); })[0];
     var igBest = reels.slice().sort(function (a, b) { return (b.v || 0) - (a.v || 0); })[0];
-    var fbBest = fbv.slice().sort(function (a, b) { return (b.v || 0) - (a.v || 0); })[0];
+    var fbBest = fbv.slice().sort(function (a, b) { return (fbVis(b) || 0) - (fbVis(a) || 0); })[0];
     var dias = (y.an && y.an.dias) || [];
     var ytHoy = dias.length ? dias[dias.length - 1] : null;
+    var subsAct = (y.canal && y.canal.subs_act) || null, apiAct = y.api_act || (y.fuente === 'vivo' ? y.act : null);
     var P = $('plats'); P.replaceChildren();
     P.append(plat('YouTube', '#ff2e2e', [
-      ['Suscriptores', fmtNum(y.canal && y.canal.subs)], ['Vistas totales', fmtNum(sum(vids, 'v'))],
-      [ytHoy ? 'Vistas ' + ytHoy.d.slice(5) : 'Publicados', ytHoy ? fmtNum(ytHoy.v) : fmtNum(pub.length)], ['Likes', fmtNum(sum(vids, 'l'))]
-    ], ytBest ? [ytBest.t, fmtNum(ytBest.v) + ' vistas'] : null, y.act, 1));
+      ['Suscriptores · total', fmtNum(y.canal && y.canal.subs)], ['Vistas · total publicados', fmtNum(sumN(pub, 'v'))],
+      [ytHoy ? 'Vistas del ' + ytHoy.d.slice(8) + '-' + MESES[+ytHoy.d.slice(5, 7) - 1] : 'Publicados ahora', ytHoy ? fmtNum(ytHoy.v) : fmtNum(pub.length)], ['Likes · total publicados', fmtNum(sumN(pub, 'l'))]
+    ], ytBest ? [ytBest.t, fmtNum(ytBest.v) + ' vistas'] : null, y.act, 1,
+      y.fuente && y.fuente !== 'vivo' ? 'Vistas y likes: feed público, ' + hace(y.act) + ' · suscriptores: ' + (subsAct ? hace(subsAct) : SD) : null));
     P.append(plat('Instagram', '#e1306c', [
-      ['Seguidores', fmtNum(ig.cuenta && ig.cuenta.seg)], ['Vistas de Reels', fmtNum(sum(reels, 'v'))],
-      ['Vistas hoy', fmtNum(ig.hoy && ig.hoy.views)], ['Alcance 7 días', fmtNum(ig['7d'] && ig['7d'].reach)]
+      ['Seguidores · total', fmtNum(ig.cuenta && ig.cuenta.seg)], ['Vistas de Reels · total', fmtNum(sumN(reels, 'v'))],
+      [igHoyTxt(ig), fmtNum(ig.hoy && ig.hoy.views)], ['Alcance · 7 días', fmtNum(ig['7d'] && ig['7d'].reach)]
     ], igBest ? [igBest.t, fmtNum(igBest.v) + ' vistas'] : null, ig.act, 2));
     P.append(plat('Facebook', '#1877f2', [
-      ['Seguidores', fmtNum(fb.pagina && fb.pagina.seg)], ['Reproducciones', fmtNum(sum(fbv, 'v'))],
-      ['Visualizaciones 7 días', fmtNum(fb.dias && fb.dias.page_media_view && fb.dias.page_media_view['7d'])], ['Interacciones 7 días', fmtNum(fb.dias && fb.dias.page_post_engagements && fb.dias.page_post_engagements['7d'])]
-    ], fbBest ? [fbBest.t, fmtNum(fbBest.v) + ' reproducciones'] : null, fb.act, 2));
-    var tt = d.tt || (d.ig && d.ig._tt) || {}, ttv = tt.videos || [];
+      ['Seguidores · total', fmtNum(fb.pagina && fb.pagina.seg)], ['Vistas de videos · total', fmtNum(sumN(fbv, fbVis))],
+      ['Vistas de la página · 7 días', fmtNum(fb.dias && fb.dias.page_media_view && fb.dias.page_media_view['7d'])], ['Interacciones · 7 días', fmtNum(fb.dias && fb.dias.page_post_engagements && fb.dias.page_post_engagements['7d'])]
+    ], fbBest ? [fbBest.t, fmtNum(fbVis(fbBest)) + ' vistas'] : null, fb.act, 2));
+    var tt = d.tt || (d.ig && d.ig._tt) || {}, ttv = tt.videos || [], ttc = tt.cuenta || {};
     var ttBest = ttv.slice().sort(function (a, b) { return (b.v || 0) - (a.v || 0); })[0];
     P.append(plat('TikTok', '#25f4ee', [
-      ['Seguidores', fmtNum(tt.cuenta && tt.cuenta.seg)], ['Vistas', ttv.length ? fmtNum(sum(ttv, 'v')) : '—'],
-      ['Publicados', fmtNum(tt.cuenta && tt.cuenta.pub_reg)], ['Programados', fmtNum(tt.cuenta && tt.cuenta.prog)]
-    ], ttBest && ttBest.v ? [ttBest.t, fmtNum(ttBest.v) + ' vistas'] : null, tt.act, 2));
+      ['Seguidores · total', fmtNum(ttc.seg)], ['Vistas · total', fmtNum(ttc.vistas !== undefined ? ttc.vistas : sumN(ttv, 'v'))],
+      ['Publicados', fmtNum(ttc.pub != null ? ttc.pub : ttc.pub_reg)], ['Programados', fmtNum(ttc.prog)]
+    ], ttBest && ttBest.v ? [ttBest.t, fmtNum(ttBest.v) + ' vistas'] : null, tt.act, 2,
+      (ttc.vistas === null || (ttc.vistas === undefined && !ttv.length)) ? 'Vistas: Publer todavía no las entrega' : null));
 
     if (y.canal && y.canal.h) $('handle').textContent = y.canal.h;
+    $('ytSub').textContent = y.fuente === 'vivo' ? 'en vivo (API) · ' + hace(y.act) : 'sin cuota de la API: ver de dónde sale cada número';
     setNum('kSubs', fmtNum(y.canal && y.canal.subs));
-    setNum('kViews', fmtNum(sum(vids, 'v')));
-    setNum('kLikes', fmtNum(sum(vids, 'l')));
-    var com = vids.some(function (v) { return v.c !== null && v.c !== undefined; }) ? sum(vids, 'c') : null;
+    $('kSubsS').textContent = 'total · ' + (subsAct ? 'leído ' + hace(subsAct) : SD) + (y.canal && y.canal.subs_fuente ? ' (página pública)' : '');
+    $('kSubsS').className = 's' + (subsAct && viejo(subsAct, 3) ? ' viejo' : '');
+    setNum('kViews', fmtNum(sumN(pub, 'v')));
+    $('kViewsS').textContent = 'total de los ' + pub.length + ' publicados · ' + (y.fuente === 'rss' ? 'feed público' : y.fuente === 'vivo' ? 'API' : 'última foto') + ' ' + hace(y.act);
+    setNum('kLikes', fmtNum(sumN(pub, 'l')));
+    var com = sumN(pub, 'c'), sinCom = pub.filter(function (v) { return v.c === null || v.c === undefined; }).length;
     setNum('kComments', fmtNum(com));
+    $('kCommentsS').textContent = y.fuente === 'vivo' ? 'total · en vivo' : 'total · de la lectura de la API ' + (apiAct ? 'del ' + fmtFull.format(new Date(apiAct)) : '') + (sinCom ? ' · ' + sinCom + ' sin dato' : '');
+    $('kCommentsS').className = 's' + (y.fuente !== 'vivo' ? ' viejo' : '');
     setNum('kPub', fmtNum(pub.length));
+    var ret = vids.filter(function (v) { return v.priv === 'retirado'; }).length;
+    $('kPubS').textContent = 'públicos ahora' + (ret ? ' · ' + ret + ' retirados no cuentan' : '');
     setNum('kProg', fmtNum(prog.length));
+    $('kProgS').textContent = y.fuente === 'vivo' ? 'esperando su hora' : 'esperando su hora · lectura de la API ' + (apiAct ? hace(apiAct) : '');
     var conPct = pub.filter(function (v) { return v.pct !== undefined && v.pct !== null; });
     if (conPct.length) {
       var tv = sum(conPct, 'v') || conPct.length;
       var prom = conPct.reduce(function (s, v) { return s + v.pct * ((v.v || 1) / tv); }, 0);
       setNum('kAvg', Math.round(prom) + '%'); $('kAvgS').textContent = 'ponderado por vistas · Analytics';
-    } else { setNum('kAvg', '—'); $('kAvgS').textContent = (y.an && y.an.nota) || 'YouTube Analytics tarda 1–2 días'; }
-    setNum('kBest', ytBest ? fmtNum(ytBest.v) : '—');
-    $('kBestS').textContent = ytBest ? ytBest.t : 'aún no hay publicados';
-    var tvw = sum(vids, 'v');
-    $('kLikesS').textContent = tvw ? (sum(vids, 'l') / Math.max(1, tvw) * 100).toFixed(1) + '% de las vistas' : 'en total';
+    } else { setNum('kAvg', SD); $('kAvgS').textContent = (y.an && y.an.nota) || 'YouTube Analytics tarda 1–2 días'; }
+    setNum('kBest', ytBest ? fmtNum(ytBest.v) : SD);
+    $('kBestS').textContent = ytBest ? ytBest.t : 'aún no hay Shorts publicados';
+    var tvw = sumN(pub, 'v');
+    $('kLikesS').textContent = tvw ? 'total · ' + (sum(pub, 'l') / Math.max(1, tvw) * 100).toFixed(1) + '% de las vistas' : 'total';
 
     var nx = $('next'); nx.replaceChildren();
     var up = prog.filter(function (v) { return new Date(v.prog) > new Date(); }).sort(function (a, b) { return new Date(a.prog) - new Date(b.prog); })[0];
@@ -1521,7 +1711,7 @@ details.faltan summary { cursor: pointer; }
       var t2 = el('span', null, fmtNum(v.v)); var ch = chipRet(v.pct); if (ch) t2.append(ch);
       row.append(t1, t2);
       var tr = el('div', 'track'), f = el('div', 'fill'); f.style.width = Math.max(2, (v.v || 0) / max * 100) + '%'; tr.append(f);
-      var meta = fmtNum(v.l) + ' likes · ' + fmtNum(v.c) + ' comentarios';
+      var meta = plural(v.l, 'like', 'likes') + ' · ' + (v.c === null || v.c === undefined ? 'comentarios: ' + SD : plural(v.c, 'comentario', 'comentarios'));
       if (v.avd) meta += ' · ' + v.avd + ' s vistos en promedio' + (v.dur ? ' de ' + v.dur + ' s' : '');
       if (v.o && v.o !== 'Otro') meta += ' · ' + v.o;
       b.append(row, tr, el('div', 'meta2', meta));
@@ -1530,9 +1720,10 @@ details.faltan summary { cursor: pointer; }
 
     $('igWhen').textContent = ig.act ? 'datos ' + hace(ig.act) : '';
     var im = $('igMini'); im.replaceChildren();
-    [['Seguidores', ig.cuenta && ig.cuenta.seg], ['Vistas hoy', ig.hoy && ig.hoy.views], ['Alcance 7 días', ig['7d'] && ig['7d'].reach],
-     ['Visitas al perfil 7 d', ig['7d'] && ig['7d'].profile_views], ['Nuevos seguidores 7 d', ig['7d'] && ig['7d'].follows]].forEach(function (x) {
+    [['Seguidores · total', ig.cuenta && ig.cuenta.seg], [igHoyTxt(ig), ig.hoy && ig.hoy.views], ['Alcance · 7 días', ig['7d'] && ig['7d'].reach],
+     ['Visitas al perfil · 7 días', ig['7d'] && ig['7d'].profile_views], ['Seguidores nuevos · 7 días', ig['7d'] && ig['7d'].follows]].forEach(function (x) {
       var d0 = el('div'); d0.append(el('b', null, fmtNum(x[1])), el('span', null, x[0])); im.append(d0);
+      if (x[1] === null || x[1] === undefined) d0.title = 'Instagram no mandó este dato' + (/nuevos/.test(x[0]) ? ' (no lo da a cuentas con menos de 100 seguidores)' : '');
     });
     var il = $('igList'); il.replaceChildren();
     if (!d.ig) il.append(el('div', 'empty', 'Todavía no hay foto de Instagram.'));
@@ -1553,9 +1744,9 @@ details.faltan summary { cursor: pointer; }
     $('fbWhen').textContent = fb.act ? 'datos ' + hace(fb.act) : '';
     var fm = $('fbMini'); fm.replaceChildren();
     var dd = fb.dias || {};
-    [['Seguidores', fb.pagina && fb.pagina.seg], ['Visualizaciones 7 d', dd.page_media_view && dd.page_media_view['7d']],
-     ['Vistas de video 7 d', dd.page_video_views && dd.page_video_views['7d']], ['Interacciones 7 d', dd.page_post_engagements && dd.page_post_engagements['7d']],
-     ['Nuevos seguidores 7 d', dd.page_daily_follows_unique && dd.page_daily_follows_unique['7d']]].forEach(function (x) {
+    [['Seguidores · total', fb.pagina && fb.pagina.seg], ['Vistas de la página · 7 días', dd.page_media_view && dd.page_media_view['7d']],
+     ['Vistas de video · 7 días', dd.page_video_views && dd.page_video_views['7d']], ['Interacciones · 7 días', dd.page_post_engagements && dd.page_post_engagements['7d']],
+     ['Seguidores nuevos · 7 días', dd.page_daily_follows_unique && dd.page_daily_follows_unique['7d']]].forEach(function (x) {
       var d0 = el('div'); d0.append(el('b', null, fmtNum(x[1])), el('span', null, x[0])); fm.append(d0);
     });
     var fl = $('fbList'); fl.replaceChildren();
@@ -1568,7 +1759,7 @@ details.faltan summary { cursor: pointer; }
       var m = el('div', 'pm');
       if (x.pub === false && x.prog) { m.append(el('span', 'pill prog', 'Programado'), el('span', null, fmtFull.format(new Date(x.prog)))); }
       else {
-        [['reproducciones', x.v], ['reacciones', x.r], ['comentarios', x.c], ['compartidos', x.sh], ['seguidores nuevos', x.segs]].forEach(function (z) {
+        [['vistas', fbVis(x)], ['reacciones', x.r], ['comentarios', x.c], ['compartidos', x.sh], ['seguidores nuevos', x.segs]].forEach(function (z) {
           var s0 = el('span'); s0.append(el('b', null, fmtNum(z[1])), document.createTextNode(' ' + z[0])); m.append(s0);
         });
         if (x.avg_ms) m.append(el('span', null, seg(x.avg_ms) + ' en promedio' + (x.dur ? ' de ' + Math.round(x.dur) + ' s' : '')));
@@ -1591,7 +1782,7 @@ details.faltan summary { cursor: pointer; }
       var m = el('div', 'm');
       if (it.v.priv === 'public') { var w = el('a', null, 'Ver'); w.href = 'https://www.youtube.com/watch?v=' + it.v.id; w.target = '_blank'; w.rel = 'noopener'; m.append(w); }
       var s = el('a', null, 'Studio'); s.href = 'https://studio.youtube.com/video/' + it.v.id + '/edit'; s.target = '_blank'; s.rel = 'noopener'; m.append(s);
-      m.append(document.createTextNode(fmtNum(it.v.v) + ' vistas · ' + fmtNum(it.v.l) + ' likes · ' + fmtNum(it.v.c) + ' com.' + (it.v.pct != null ? ' · ' + Math.round(it.v.pct) + '% visto' : '')));
+      m.append(document.createTextNode(it.v.priv === 'public' ? fmtNum(it.v.v) + ' vistas · ' + fmtNum(it.v.l) + ' likes · ' + fmtNum(it.v.c) + ' com.' + (it.v.pct != null ? ' · ' + Math.round(it.v.pct) + '% visto' : '') : (it.v.priv === 'retirado' ? 'ya no está público (privado o reemplazado)' : vencido(it.v) ? 'su hora pasó y no aparece publicado' : 'todavía no sale')));
       tt2.append(m);
       row.append(tt2, el('span', 'pill ' + it.e.cls, it.e.txt));
       dayBox.append(row);
@@ -1605,14 +1796,121 @@ details.faltan summary { cursor: pointer; }
     tick();
   }
 
+  // ---------- 19-nov auditoría: (c) qué salió hoy y qué sale · (d) qué está fallando · resumen de 5 segundos ----------
+  var RES = { a: null, b: null, c: null, d: null };
+  var AB = { YouTube: 'YT', Instagram: 'IG', Facebook: 'FB', TikTok: 'TT' };
+  function publicacionesDe(d) {
+    var y = d.yt || {}, ig = d.ig || {}, fb = d.fb || {}, tt = d.tt || (d.ig && d.ig._tt) || {}, L = [];
+    (y.videos || []).forEach(function (v) { if (v.priv === 'public' && v.pub) L.push({ red: 'YouTube', at: v.pub, t: v.t, v: v.v, url: 'https://www.youtube.com/' + (esShort(v) ? 'shorts/' : 'watch?v=') + v.id }); });
+    (ig.reels || []).forEach(function (r) { if (r.f) L.push({ red: 'Instagram', at: r.f, t: r.t, v: r.v, url: r.url }); });
+    (fb.videos || []).forEach(function (x) { if (x.f && x.pub !== false) L.push({ red: 'Facebook', at: x.f, t: x.t, v: fbVis(x), url: x.url, story: !x.reel }); });
+    (tt.publicados || []).forEach(function (x) { if (x.f) L.push({ red: 'TikTok', at: x.f, t: x.t, v: null, url: x.url }); });
+    return L.filter(function (x) { return !isNaN(Date.parse(x.at)); });
+  }
+  function filaPub(x, conDia) {
+    var li = el('li'), t = new Date(x.at);
+    li.append(el('span', 'hr', (conDia && dayKey.format(t) !== dayKey.format(new Date()) ? fmtWd.format(t).replace('.', '') + ' ' : '') + fmtHr.format(t)));
+    var rd = el('span', 'rd', AB[x.red] || x.red); rd.style.background = COLOR_RED[x.red] || '#ccc'; rd.title = x.red; li.append(rd);
+    var tt = el('span', 't');
+    if (x.url) { var a = el('a', null, x.t || '(sin título)'); a.href = x.url; a.target = '_blank'; a.rel = 'noopener'; tt.append(a); } else tt.textContent = x.t || '(sin título)';
+    tt.title = x.t || ''; li.append(tt);
+    if (x.v !== undefined) { var v = el('span', 'v', x.v === null ? SD : fmtNum(x.v)); if (x.v !== null) v.append(el('small', null, ' vistas')); li.append(v); }
+    else li.append(el('span'));
+    return li;
+  }
+  function renderSalio(d) {
+    var hoyK = dayKey.format(new Date()), ayerK = dayKey.format(new Date(Date.now() - 864e5));
+    var L = publicacionesDe(d).filter(function (x) { return !x.story; });
+    var hoy = L.filter(function (x) { return dayKey.format(new Date(x.at)) === hoyK; }).sort(function (a, b) { return Date.parse(b.at) - Date.parse(a.at); });
+    var ayer = L.filter(function (x) { return dayKey.format(new Date(x.at)) === ayerK; }).sort(function (a, b) { return Date.parse(b.at) - Date.parse(a.at); });
+    var vHoy = sumN(hoy, 'v'), vAyer = sumN(ayer, 'v');
+    $('salioN').textContent = hoy.length ? plural(hoy.length, 'publicación', 'publicaciones') + (vHoy != null ? ' · ' + fmtNum(vHoy) + ' vistas hasta ahora' : '') : '';
+    var H = $('salioHoy'); H.replaceChildren();
+    if (!hoy.length) H.append(el('div', 'empty', 'Hoy (' + fmtDay.format(new Date()) + ') todavía no sale nada.'));
+    else { var ul = el('ul', 'pl'); hoy.forEach(function (x) { ul.append(filaPub(x)); }); H.append(ul); }
+    if (ayer.length) {
+      var dt = el('details'); dt.style.marginTop = '10px';
+      dt.append(el('summary', 'plnota', 'Ayer salieron ' + plural(ayer.length, 'publicación', 'publicaciones') + (vAyer != null ? ' · ' + fmtNum(vAyer) + ' vistas hasta ahora' : '') + ' (ver)'));
+      var u2 = el('ul', 'pl'); ayer.forEach(function (x) { u2.append(filaPub(x)); }); dt.append(u2); H.append(dt);
+    }
+    H.append(el('div', 'plnota', 'Vistas totales de cada publicación hasta ahora. TikTok: sin dato (Publer todavía no entrega vistas). No cuenta las historias automáticas de Facebook.'));
+    // lo que sale: la lista de la oficina (las 4 redes) + programados de YouTube en vivo, solo lo que todavía no pasa
+    var ahora = Date.now(), vistos = {}, P = [];
+    ((d.oficina && d.oficina.proximas) || []).forEach(function (x) { var t = Date.parse(x.cuando); if (t > ahora) { var k = x.red + '|' + new Date(t).toISOString().slice(0, 16); if (!vistos[k]) { vistos[k] = 1; P.push({ red: x.red, at: x.cuando, t: x.t }); } } });
+    ((d.yt && d.yt.videos) || []).filter(programadoVivo).forEach(function (v) { var t = Date.parse(v.prog); if (t > ahora) { var k = 'YouTube|' + new Date(t).toISOString().slice(0, 16); if (!vistos[k]) { vistos[k] = 1; P.push({ red: 'YouTube', at: v.prog, t: v.t }); } } });
+    P.sort(function (a, b) { return Date.parse(a.at) - Date.parse(b.at); });
+    var S = $('saleLuego'); S.replaceChildren();
+    if (!P.length) S.append(el('div', 'empty', 'No hay nada programado.'));
+    else {
+      var ul3 = el('ul', 'pl'); P.slice(0, 6).forEach(function (x) { ul3.append(filaPub(x, true)); }); S.append(ul3);
+      if (P.length > 6) S.append(el('div', 'plnota', 'y ' + (P.length - 6) + ' más (Centro de operaciones, abajo).'));
+    }
+    RES.c = { hoy: hoy.length, vHoy: vHoy, ayer: ayer.length, sig: P[0] || null };
+  }
+  function renderFalla(d) {
+    var y = d.yt || {}, O = d.oficina_vivo || {}, it = [], ahora = Date.now();
+    var sinCuota = y.fuente && y.fuente !== 'vivo';
+    if (sinCuota) {
+      var apiAct = y.api_act || null;
+      it.push({ n: 'media', t: 'YouTube: sin cuota de la API' + (y.reintento ? ' hasta las ' + fmtHr.format(new Date(y.reintento)) : ''), q: 'No se puede subir ni corregir en YouTube. Vistas, likes y suscriptores sí están al momento (feed y página pública); comentarios y programados son de la última lectura buena' + (apiAct ? ' (' + fmtFull.format(new Date(apiAct)) + ')' : '') + '.' });
+    }
+    if (!d.foto) it.push({ n: 'alta', t: 'No llegó la foto de Instagram, Facebook, TikTok, metas y equipo', q: 'Esos números salen como «sin dato» hasta la siguiente foto (cada hora).' });
+    if (d.foto && viejo(d.foto, 1.5)) it.push({ n: viejo(d.foto, 3) ? 'alta' : 'media', t: 'Los datos de Instagram, Facebook, TikTok, metas y equipo son de ' + hace(d.foto), q: 'Se toman cada hora; si sigue así, revisa la tarea de cada hora.' });
+    [['Instagram', d.ig], ['Facebook', d.fb], ['TikTok', d.tt]].forEach(function (x) { if (x[1] && x[1].error) it.push({ n: 'alta', t: x[0] + ': ' + x[1].error }); });
+    (O.alertas || []).forEach(function (a) {
+      if (!a || !a.texto) return;
+      if (sinCuota && /^cuota de youtube/i.test(String(a.texto).trim())) return;   // ya está arriba
+      it.push({ n: a.nivel === 'alta' ? 'alta' : 'media', t: a.texto });
+    });
+    // un programado de YouTube cuya hora pasó y no salió (si no lo reemplazó otro con el mismo título)
+    var pubT = {}; ((y.videos || []).filter(function (v) { return v.priv === 'public'; })).forEach(function (v) { pubT[v.t] = 1; });
+    (y.videos || []).filter(function (v) { return v.priv !== 'public' && v.prog && vencido(v) && ahora - Date.parse(v.prog) < 12 * 3600e3 && !pubT[v.t]; }).forEach(function (v) {
+      it.push({ n: 'media', t: 'YouTube: «' + v.t + '» tenía hora ' + fmtHr.format(new Date(v.prog)) + ' y no aparece publicado' });
+    });
+    var ov = RES.ov || {};
+    (ov.atorados || []).filter(function (a) { return !(sinCuota && /cuota/i.test(a.por)); }).forEach(function (a) { it.push({ n: 'media', t: 'Atorado: ' + a.nombre + (a.por ? ' — ' + a.por : '') }); });
+    (ov.atrasados || []).forEach(function (a) { it.push({ n: 'media', t: 'Atrasado: ' + a.nombre + (a.por ? ' — ' + a.por : '') }); });
+    if (ov.cicloAtorados) it.push({ n: 'media', t: plural(ov.cicloAtorados, 'video atorado', 'videos atorados') + ' en el ciclo (ver «El equipo en vivo»)' });
+    var tt = d.tt || (d.ig && d.ig._tt) || {}, ttc = tt.cuenta || {};
+    if (ttc.seg === 0 && (ttc.pub || ttc.pub_reg || 0) >= 3 && !it.some(function (x) { return /tiktok/i.test(x.t); })) it.push({ n: 'media', t: 'TikTok: ' + plural(ttc.pub || ttc.pub_reg, 'video publicado', 'videos publicados') + ' y 0 seguidores', q: 'Publer no entrega vistas de TikTok.' });
+    var fz = (d.faltan || []).filter(function (f) { return !(sinCuota && f.p === 'youtube' && /Data API/.test(f.m)); });
+    if (fz.length) it.push({ n: 'media', t: plural(fz.length, 'métrica no se pudo leer', 'métricas no se pudieron leer') + ' en la última foto', q: fz.slice(0, 3).map(function (f) { return f.p + ' · ' + f.m; }).join(' · ') });
+    it.sort(function (a, b) { return (a.n === 'alta' ? 0 : 1) - (b.n === 'alta' ? 0 : 1); });
+    $('fallaN').textContent = it.length;
+    var L = $('fallaL'); L.replaceChildren();
+    if (!it.length) L.append(el('li', 'ok', '✓ Nada fallando ahora.'));
+    it.forEach(function (x) { var li = el('li', x.n); li.append(el('i', null, x.n === 'alta' ? '!' : '•')); var c = el('div', null, x.t); if (x.q) c.append(el('span', 'q', x.q)); li.append(c); L.append(li); });
+    RES.d = { n: it.length, alta: it.filter(function (x) { return x.n === 'alta'; }).length, primero: it[0] ? it[0].t : '' };
+  }
+  function tile(id, cls, b, sTxt) { var t = $(id); t.className = 'rs' + (cls ? ' ' + cls : ''); t.children[1].textContent = b; t.children[2].textContent = sTxt; }
+  function renderResumen() {
+    var a = RES.a, b = RES.b, c = RES.c, d = RES.d;
+    if (a) tile('rsA', a.n ? 'ojo' : 'ok', a.n ? String(a.n) : 'Nada', a.n ? [a.decs ? plural(a.decs, 'decisión', 'decisiones') : '', a.tareas ? plural(a.tareas, 'tarea de hoy', 'tareas de hoy') : ''].filter(Boolean).join(' · ') : (a.sinFoto ? 'esperando la foto de la oficina' : 'todo va solo'));
+    if (b && b.conv) tile('rsB', b.conv.pct != null && b.conv.pct >= 50 ? 'ok' : 'ojo', (b.conv.hoy == null ? SD : nf2.format(b.conv.hoy)) + ' / ' + fmtNum(b.conv.meta), 'seguidores por cada 1,000 vistas (meta #1)' + (b.conRitmo ? ' · ' + b.adel + ' de ' + b.conRitmo + ' metas a tiempo' : ''));
+    else tile('rsB', '', SD, 'las metas llegan con la próxima foto');
+    if (c) tile('rsC', '', c.hoy ? plural(c.hoy, 'salió', 'salieron') : 'Nada aún', (c.vHoy != null && c.hoy ? fmtNum(c.vHoy) + ' vistas · ' : (c.ayer ? 'ayer ' + c.ayer + ' · ' : '')) + (c.sig ? 'sigue ' + cuandoCorto(c.sig.at) + ' ' + c.sig.red : 'nada programado'));
+    if (d) tile('rsD', d.alta ? 'mal' : d.n ? 'ojo' : 'ok', d.n ? String(d.n) : 'Nada', d.n ? d.primero : 'todo en orden');
+  }
+  // frescura: la foto (Instagram, Facebook, TikTok, metas, equipo) se toma cada hora; YouTube se lee al momento
+  function frescura() {
+    var d = datosAct; if (!d) return;
+    var y = d.yt || {}, foto = d.foto || (d.oficina_vivo && d.oficina_vivo.t) || null;
+    var edad = foto ? (Date.now() - Date.parse(foto)) / 60000 : null;
+    var ch = $('fresco'); ch.className = 'live fresco ' + (edad === null ? 'viejo' : edad < 75 ? 'ok' : edad < 180 ? 'medio' : 'viejo');
+    $('liveTxt').textContent = foto ? 'Datos de ' + hace(foto) : 'Datos: ' + SD;
+    ch.title = 'Toca para ver de dónde sale cada número';
+    var subsAct = y.canal && y.canal.subs_act, apiAct = y.api_act || (y.fuente === 'vivo' ? y.act : null);
+    var D = $('frescoD'); D.replaceChildren();
+    var l1 = el('div'); l1.append(el('b', null, 'Instagram, Facebook, TikTok, metas y equipo: '), document.createTextNode(foto ? 'foto de las ' + fmtHr.format(new Date(foto)) + ' (' + hace(foto) + '); se toma cada hora.' : SD));
+    var l2 = el('div'); l2.append(el('b', null, 'YouTube: '), document.createTextNode(y.fuente === 'vivo' ? 'en vivo por la API (' + hace(y.act) + ').' :
+      'vistas y likes del feed público (' + hace(y.act) + ') · suscriptores de la página del canal (' + (subsAct ? hace(subsAct) : SD) + ') · comentarios y programados de la última lectura de la API (' + (apiAct ? fmtFull.format(new Date(apiAct)) : SD) + ').'));
+    var l3 = el('div'); l3.append(el('b', null, 'Este panel: '), document.createTextNode('leído ' + (lastAt ? hace(new Date(lastAt).toISOString()) : SD) + '; se recarga solo cada minuto. Horas del centro de México.'));
+    D.append(l1, l2, l3);
+  }
+
   function tick() {
     $('fecha').textContent = fmtDay.format(new Date());
-    if (datosAct) {
-      var y = datosAct.yt || {};
-      var txt = y.fuente === 'vivo' ? 'YouTube en vivo' : y.fuente === 'rss' ? 'YouTube: feed público' : y.fuente === 'cache' ? 'YouTube: última lectura' : 'YouTube: última foto';
-      var fa = datosAct.fabrica && datosAct.fabrica.act;
-      $('liveTxt').textContent = txt + ' · ' + (lastAt ? 'leído ' + hace(new Date(lastAt).toISOString()) : 'guardado ' + hace(datosAct.ahora)) + (fa ? ' · fábrica ' + hace(fa) : '');
-    }
+    if (datosAct && (!tick.ult || Date.now() - tick.ult > 15000)) { tick.ult = Date.now(); try { frescura(); } catch (e) { console.warn('frescura', e); } }
     document.querySelectorAll('.count[data-at]').forEach(function (c) {
       var ms = new Date(c.dataset.at) - Date.now();
       if (ms <= 0) { c.textContent = '¡Ya salió!'; return; }
@@ -1638,6 +1936,15 @@ details.faltan summary { cursor: pointer; }
   });
   $('logoutBtn').addEventListener('click', function () { try { localStorage.removeItem(KEY); localStorage.removeItem(LAST); } catch (e) {} key = null; showLogin(''); });
   $('refreshBtn').addEventListener('click', function () { load(true); });
+  // 19-nov auditoría: la ficha "de dónde sale cada número" se abre tocando el chip de frescura
+  var abrirFresco = function () { $('frescoD').classList.toggle('on'); };
+  $('fresco').addEventListener('click', abrirFresco);
+  $('fresco').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrirFresco(); } });
+  // las secciones de abajo empiezan plegadas; cada quien deja abiertas las que quiera (se recuerda en este navegador)
+  document.querySelectorAll('details.mas').forEach(function (dt) {
+    try { if (localStorage.getItem('seis-mas-' + dt.id) === '1') dt.open = true; } catch (e) {}
+    dt.addEventListener('toggle', function () { try { localStorage.setItem('seis-mas-' + dt.id, dt.open ? '1' : '0'); } catch (e) {} });
+  });
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && Date.now() - lastAt > 30000) load(true); });
 
   setInterval(tick, 1000);

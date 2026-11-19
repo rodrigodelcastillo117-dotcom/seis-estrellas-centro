@@ -116,9 +116,10 @@ async function leerCanal() {
     });
   }
   const cs = ch.statistics || {};
+  const ahora = new Date().toISOString();
   return {
-    fuente: "vivo", act: new Date().toISOString(),
-    canal: { t: ch.snippet.title, h: ch.snippet.customUrl || "", subs: Number(cs.subscriberCount || 0), v: Number(cs.viewCount || 0), n: Number(cs.videoCount || 0) },
+    fuente: "vivo", act: ahora, api_act: ahora,
+    canal: { t: ch.snippet.title, h: ch.snippet.customUrl || "", subs: Number(cs.subscriberCount || 0), v: Number(cs.viewCount || 0), n: Number(cs.videoCount || 0), subs_act: ahora },
     videos,
   };
 }
@@ -144,6 +145,39 @@ async function leerRSS() {
   return out;
 }
 
+// 19-nov auditoría: suscriptores de la página pública del canal (sin cuota). Antes, sin cuota, se quedaban congelados
+// en la última lectura buena de la API (6 cuando ya eran 9) y se mostraban como actuales.
+let SUBS = { at: 0, n: null };
+async function leerSubs() {
+  if (SUBS.n !== null && Date.now() - SUBS.at < RSS_MS) return SUBS;
+  const r = await fetch("https://www.youtube.com/channel/" + CANAL_ID + "?hl=es-419", { headers: { "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120 Safari/537.36", "Accept-Language": "es-MX,es;q=0.9" } });
+  if (!r.ok) throw new Error("canal " + r.status);
+  const x = await r.text();
+  if (x.indexOf(CANAL_ID) < 0) throw new Error("no es el canal");
+  const m = /"content":"([\d.,]+)\s+(?:suscriptores|suscriptor|subscribers|subscriber)"/.exec(x);
+  if (!m) throw new Error("sin número de suscriptores");
+  SUBS = { at: Date.now(), n: Number(m[1].replace(/[.,\s]/g, "")) };
+  return SUBS;
+}
+
+// 19-nov auditoría: el feed trae los 15 publicados más recientes. Un video que la foto tenía como público, que ya no está en el
+// feed y es más nuevo que el más viejo del feed (o el feed trae < 15), dejó de ser público: "retirado". Un programado cuya hora
+// pasó y no está en el feed no salió. (Antes se seguían contando como publicados: 18 en el panel, 15 en YouTube.)
+function marcarConFeed(vids, feed) {
+  const ids = Object.keys(feed);
+  if (!ids.length) return;
+  const completo = ids.length < 15;
+  const piso = ids.map((id) => feed[id].pub || "9999").sort()[0];
+  const lim = Date.now() - 20 * 60000;
+  Object.keys(vids).forEach((id) => {
+    const x = vids[id];
+    if (feed[id]) { delete x.no_salio; delete x.retirado; return; }
+    if (x.priv === "public" && (completo || (x.pub || "") >= piso)) { x.priv = "retirado"; x.retirado = x.retirado || new Date().toISOString(); }
+    else if (x.priv !== "public" && x.priv !== "retirado" && x.prog && Date.parse(x.prog) < lim) x.no_salio = true;
+    if (x.priv === "retirado") delete x.no_salio;
+  });
+}
+
 // Respaldo: última foto + feed público encima (vistas y likes al momento de los publicados)
 async function respaldo(motivo) {
   const base = (SNAP && SNAP.yt) || { canal: { t: "Seis Estrellas", h: "@seisestrellasmx", subs: null }, videos: [] };
@@ -156,14 +190,20 @@ async function respaldo(motivo) {
       const x = vids[id] || (vids[id] = { id, priv: "public", prog: null, proc: "processed", c: null, dur: null, o: "Otro" });
       Object.assign(x, feed[id], { priv: "public" });
     });
+    marcarConFeed(vids, feed);
     fuente = "rss"; act = new Date().toISOString();
   } catch (e) { /* sin feed: queda la foto */ }
+  const canal = Object.assign({}, base.canal || {});
+  try {
+    const s = await leerSubs();
+    canal.subs = s.n; canal.subs_act = new Date(s.at).toISOString(); canal.subs_fuente = "página pública del canal";
+  } catch (e) { /* se queda el de la foto, con su fecha (subs_act) */ }
   const aviso = (motivo === "cuota"
     ? "Se acabó la cuota diaria de la API de YouTube (se comparte con las subidas; se reinicia a las 02:05 CDMX). "
     : "La API de YouTube no respondió. ") +
-    (fuente === "rss" ? "Las vistas y likes de los publicados vienen del feed público de YouTube (al momento); suscriptores, comentarios y programados son de la última lectura buena."
+    (fuente === "rss" ? "Vistas y likes de los publicados: feed público de YouTube (al momento). Suscriptores: página pública del canal. Comentarios y programados: última lectura buena de la API."
       : "Se muestran los datos de la última foto.");
-  return { fuente, act, aviso, canal: base.canal, videos: Object.values(vids), canal_act: base.act || null };
+  return { fuente, act, aviso, canal, videos: Object.values(vids), canal_act: base.act || null, api_act: base.api_act || null };
 }
 
 function conRetencion(y) {
