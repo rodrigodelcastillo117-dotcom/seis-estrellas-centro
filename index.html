@@ -1045,7 +1045,7 @@ details.faltan summary { cursor: pointer; }
       top.append(av, who); c.append(top);
       // estado (como la etiqueta de la oficina), su turno y sus becarios
       var tags = el('div', 'tags'), pill = el('span', 'est', v.txt); pill.style.setProperty('--c', v.color); tags.append(pill);
-      if (v.est === 'trabajando') tags.append(el('span', 'tag on', 'En turno · empezó ' + hace(new Date(v.fired).toISOString())));
+      if (v.est === 'trabajando') { if (v.fired) tags.append(el('span', 'tag on', 'En turno · empezó ' + hace(new Date(v.fired).toISOString()))); else if (!porAg[a.id]) tags.append(el('span', 'tag on', 'Trabajando' + (a.motivo ? ' · ' + a.motivo : ''))); }  // 19-nov: sin hora de turno (trabaja por un becario) no se inventa la fecha
       else { var tt = textoTurno(v.next) || (a.horario ? 'Turno: ' + a.horario : ''); if (tt) tags.append(el('span', 'tag', tt)); }
       if (porAg[a.id]) tags.append(el('span', 'tag bec', porAg[a.id] === 1 ? '1 becario trabajando' : porAg[a.id] + ' becarios trabajando'));
       c.append(tags);
