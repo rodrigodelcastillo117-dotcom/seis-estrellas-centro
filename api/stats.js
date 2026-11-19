@@ -2,7 +2,7 @@
 // YouTube en vivo (API, solo lectura) con respaldo que no se cae: si no hay cuota, usa el feed público de YouTube
 // (vistas y likes de los publicados, sin cuota) y la última foto (_datos.json). Instagram y Facebook vienen de la foto,
 // que se genera cada hora con panel_snapshot.py y se publica con el despliegue.
-// Variables de entorno (Vercel): YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN, PANEL_PASSWORD
+// Variables de entorno (Vercel): YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN, PANEL_PASSWORD (Rodrigo), PANEL_PASSWORD_CARLO (Carlo)
 
 let SNAP = null;
 try { SNAP = require("./_datos.json"); } catch (e) { SNAP = null; }
@@ -13,6 +13,38 @@ const CACHE_MS = 10 * 60 * 1000; // 3 unidades de cuota por lectura: máximo una
 let RSS = { at: 0, data: null };
 const RSS_MS = 5 * 60 * 1000;
 let SIN_CUOTA_HASTA = 0; // si YouTube dice "quota", no volvemos a preguntar hasta que se reinicie
+
+// 19-nov · Freno contra adivinar la contraseña: cada contraseña mal espera ~1.5 s antes del 401 y, tras 8 fallos
+// desde la misma IP en 10 min, esa IP recibe 429 hasta que se vacía su ventana.
+// Es un freno "best effort": vive en la memoria de esta instancia serverless. Vercel puede tener varias instancias
+// (cada una lleva su propia cuenta) y la memoria se borra cuando recicla la instancia, así que frena, no blinda.
+// Nunca se guarda, se registra (console) ni se devuelve la contraseña: solo la IP y la hora de cada fallo.
+const FALLOS = new Map(); // ip -> [ms de cada fallo dentro de la ventana]
+const FALLOS_VENTANA_MS = 10 * 60 * 1000;
+const FALLOS_MAX = 8;
+const ESPERA_FALLO_MS = 1500;
+
+function ipDe(req) {
+  const xf = String((req.headers && req.headers["x-forwarded-for"]) || "").split(",")[0].trim();
+  return xf || String((req.headers && req.headers["x-real-ip"]) || "") || (req.socket && req.socket.remoteAddress) || "sin-ip";
+}
+
+function fallosRecientes(ip, ahora) {
+  const lista = (FALLOS.get(ip) || []).filter((t) => ahora - t < FALLOS_VENTANA_MS);
+  if (lista.length) FALLOS.set(ip, lista); else FALLOS.delete(ip);
+  return lista;
+}
+
+function anotarFallo(ip, ahora) {
+  const lista = fallosRecientes(ip, ahora);
+  lista.push(ahora);
+  FALLOS.set(ip, lista);
+  if (FALLOS.size > 2000) {   // limpieza para que la memoria no crezca sin fin
+    for (const k of Array.from(FALLOS.keys())) fallosRecientes(k, ahora);
+  }
+}
+
+const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function proximoReinicio() {
   // la cuota diaria se reinicia a medianoche hora del Pacífico (08:00 UTC en invierno); usamos 08:05 UTC
@@ -145,11 +177,22 @@ function conRetencion(y) {
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("Content-Type", "application/json; charset=utf-8");
+  // 19-nov: freno de contraseña (ver arriba). Mientras una IP esté frenada no se revisa ninguna contraseña suya.
+  const ip = ipDe(req);
+  const recientes = fallosRecientes(ip, Date.now());
+  if (recientes.length >= FALLOS_MAX) {
+    res.statusCode = 429;
+    res.setHeader("Retry-After", String(Math.max(1, Math.ceil((recientes[0] + FALLOS_VENTANA_MS - Date.now()) / 1000))));
+    res.end(JSON.stringify({ error: "Demasiados intentos, espera 10 minutos" }));
+    return;
+  }
   // 19-nov: cada persona entra con SU contraseña (Rodrigo: PANEL_PASSWORD · Carlo: PANEL_PASSWORD_CARLO)
   const clave = req.headers["x-panel-key"] || "";
   const USUARIOS = [["Rodrigo", process.env.PANEL_PASSWORD], ["Carlo", process.env.PANEL_PASSWORD_CARLO]];
   const quien = clave ? USUARIOS.find(([, c]) => c && c === clave) : null;
   if (!quien) {
+    anotarFallo(ip, Date.now());
+    await esperar(ESPERA_FALLO_MS);
     res.statusCode = 401;
     res.end(JSON.stringify({ error: "Contraseña incorrecta" }));
     return;
