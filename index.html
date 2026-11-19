@@ -987,7 +987,7 @@ details.faltan summary { cursor: pointer; }
     // la oficina pone TRABAJANDO si su turno arrancó hace < 25 min y aún no deja registro de esa corrida (aquí el turno sale de su horario)
     var fired = null, t = turnoDe(a, todos, ahora - 25 * 60000), n = 0;
     while (t && t <= ahora && n++ < 6) { fired = t; t = turnoDe(a, todos, t); }
-    if (fired && !(ultT && ultT >= fired - 60000)) est = 'trabajando';
+    if (a.estado === 'trabajando' || (fired && !(ultT && ultT >= fired - 60000))) est = 'trabajando';  // 19-nov: si la oficina dice que trabaja (becario activo), aquí también
     if (a.bloqueo && est !== 'trabajando') est = 'bloqueado';
     if (est === 'acaba' && !(ultT && ahora - ultT < 40 * 60000)) est = 'espera';
     if (!(est in ORDEN) || est === 'medio') est = 'espera';
