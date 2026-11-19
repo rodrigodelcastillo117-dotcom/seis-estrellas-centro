@@ -175,6 +175,9 @@ module.exports = async (req, res) => {
     tt: (SNAP && SNAP.tt) || null,
     oficina: (SNAP && SNAP.oficina) || null,
     fabrica: (SNAP && SNAP.fabrica) || null,
+    // 19-nov: el mismo estado que la oficina de claude.ai (agentes, becarios, juntas, ciclo, fiesta) y las decisiones del CEO
+    oficina_vivo: (SNAP && SNAP.oficina_vivo) || null,
+    decisiones_pendientes: (SNAP && SNAP.decisiones_pendientes) || [],
     foto: (SNAP && SNAP.act) || null,
     faltan: (SNAP && SNAP.faltan) || [],
   };
