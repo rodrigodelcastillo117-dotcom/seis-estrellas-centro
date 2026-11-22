@@ -426,6 +426,13 @@ details.faltan summary { cursor: pointer; }
 .decok { margin-top: 10px; padding: 9px 11px; border-radius: 12px; background: rgba(61,220,151,.12); border: 1px solid rgba(61,220,151,.45); font-size: 13px; }
 .decok b { color: var(--ok); }
 .decok small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+/* 22-nov b43600f: Carlo (socio) también decide; Rodrigo puede cambiar lo de Carlo con un botón chico */
+.decok.carlo { background: rgba(52,216,255,.1); border-color: rgba(52,216,255,.45); }
+.decok.carlo b { color: #a8ecff; }
+.deccam { display: inline-block; margin-left: 4px; min-height: 30px; padding: 3px 12px; border-radius: 9px; border: 1px solid var(--line2); background: rgba(255,255,255,.07); color: var(--fg); font: 700 12.5px var(--body); cursor: pointer; touch-action: manipulation; vertical-align: 1px; }
+.deccam:hover { filter: brightness(1.2); }
+.deccam:disabled { opacity: .5; cursor: default; filter: none; }
+.decb + .deccam, .decl + .deccam { margin: 8px 0 0; }
 .hoyl li.hecha .pq { opacity: .7; }
 .decnota { margin: 0 0 8px; font-size: 12px; color: var(--warn); }
 .hoy details { font-size: 13px; color: var(--muted); }
@@ -1283,7 +1290,7 @@ details.mas > .in > * { min-width: 0; }
   function oBox(id, titulo, sub) { var B = $(id); B.replaceChildren(); var h = el('h3', null, titulo); if (sub) h.append(el('small', null, sub)); B.append(h); return B; }
 
   function renderOV(d) {
-    var O = d.oficina_vivo || null, decs = d.decisiones_pendientes || [], ahora = Date.now();
+    var O = d.oficina_vivo || null, decs = (d.decisiones_pendientes || []).filter(function (x) { return x && !x.respuesta; }), ahora = Date.now();   // 22-nov b43600f: sin las ya contestadas por Carlo
     // decisiones (siempre: vienen aparte de la oficina)
     $('ovDecN').textContent = decs.length;
     var L = $('ovDecL'); L.replaceChildren();
@@ -1517,27 +1524,50 @@ details.mas > .in > * { min-width: 0; }
   function caja(titulo, sub) { var B = el('div', 'ovbox'), h = el('h3', null, titulo); if (sub) h.append(el('small', null, sub)); B.append(h); return B; }
 
   // ===== 22-nov (becario bb01297) · el CEO: «aquí debería de poder decidir también con una palomita o tache» =====
-  // ✓ = la opción recomendada · ✗ = la otra (si hay más de una, abre la lista). Solo el CEO (Rodrigo) y con su código para decidir,
-  // que escribe una vez y queda en este navegador. api/decidir.js lo revisa contra PANEL_DECIDIR_CODIGO (Vercel) y deja la respuesta
-  // firmada; canal/decisiones_panel.py la escribe en decisiones_ceo.json en la revisión de cada hora (igual que la Oficina).
+  // ✓ = la opción recomendada · ✗ = la otra (si hay más de una, abre la lista). Con su código para decidir, que se escribe una vez
+  // y queda en este navegador. api/decidir.js lo revisa en el servidor y deja la respuesta firmada; canal/decisiones_panel.py la
+  // escribe en decisiones_ceo.json en la revisión de cada hora (igual que la Oficina).
+  // 22-nov (becario b43600f) · el CEO: «que tambien tenga decisiones, es socio»: Carlo también decide, con SU código
+  // (PANEL_DECIDIR_CODIGO_CARLO). Vale la primera respuesta; si Rodrigo contesta una que ya contestó Carlo, gana Rodrigo
+  // (botón chico «cambiar»). Carlo no cambia lo de Rodrigo. QUIÉN es lo decide el servidor (contraseña + código), no esta página.
   var DKEY = 'seis-estrellas-decidir-codigo', DHECHAS = 'seis-estrellas-decididas';
   var DECUI = { id: null, fase: null, opcion: null, err: '', enviando: false };   // la decisión que se está contestando
   var DSRV = { at: 0, listo: null, contestadas: {} };                              // lo que ya está guardado del lado del servidor
   function quitaReco(o) { return String(o || '').replace(/\s*\(recomendad[oa]\)\s*$/i, ''); }
   function esCEO(d) { return !!(d && d.usuario === 'Rodrigo'); }
+  function esCarlo(d) { return !!(d && d.usuario === 'Carlo'); }
+  function puedeDecidir(d) { return esCEO(d) || esCarlo(d); }
+  function dkey() { return esCarlo(datosAct) ? DKEY + '-carlo' : DKEY; }   // cada quien guarda SU código (Rodrigo: la llave de antes)
   function decLocales() {
     var m = {}, out = {}, lim = Date.now() - 13 * 3600e3;   // ntfy guarda 12 h: pasado eso, si no llegó, se puede volver a contestar
     try { m = JSON.parse(localStorage.getItem(DHECHAS) || '{}') || {}; } catch (e) { m = {}; }
     Object.keys(m).forEach(function (k) { if (m[k] && Date.parse(m[k].f) > lim) out[k] = m[k]; });
     return out;
   }
-  function decGuardaLocal(id, v) { var m = decLocales(); m[id] = { opcion: v.opcion, f: v.f }; try { localStorage.setItem(DHECHAS, JSON.stringify(m)); } catch (e) {} }
-  function decContestada(id) { return DSRV.contestadas[id] || decLocales()[id] || null; }
+  function decGuardaLocal(id, v) { var m = decLocales(); m[id] = { opcion: v.opcion, f: v.f, quien: v.quien || 'Rodrigo', previas: v.previas || [] }; try { localStorage.setItem(DHECHAS, JSON.stringify(m)); } catch (e) {} }
+  // la regla (igual que el servidor): la primera vale; una de Rodrigo después de una de Carlo la reemplaza
+  function decResolver(cands) {
+    var xs = [], vistos = {};
+    cands.forEach(function (c) {
+      if (!c) return;
+      (c.previas || []).concat([c]).forEach(function (r) {
+        if (!r || r.opcion == null) return;
+        var q = r.quien === 'Carlo' ? 'Carlo' : 'Rodrigo', k = q + '\n' + r.f + '\n' + r.opcion;   // las de antes (sin quien) solo podían ser de Rodrigo
+        if (!vistos[k]) { vistos[k] = 1; xs.push({ opcion: r.opcion, f: r.f, quien: q }); }
+      });
+    });
+    xs.sort(function (a, b) { return (Date.parse(a.f) || 0) - (Date.parse(b.f) || 0); });
+    var cur = null, prev = [];
+    xs.forEach(function (r) { if (!cur) cur = r; else if (cur.quien === 'Carlo' && r.quien === 'Rodrigo') { prev.push(cur); cur = r; } });
+    return cur ? { opcion: cur.opcion, f: cur.f, quien: cur.quien, previas: prev } : null;
+  }
+  function decFoto(x) { return x && x.respuesta && x.quien === 'Carlo' ? { opcion: x.respuesta, f: x.t_respuesta, quien: 'Carlo' } : null; }
+  function decContestada(x) { return x ? decResolver([DSRV.contestadas[x.id], decFoto(x), decLocales()[x.id]]) : null; }
   function decOcupado() { return !!(DECUI.id && DECUI.fase === 'confirma'); }
   function decPintar() { if (!datosAct) return; try { renderHoy(datosAct, true); } catch (e) { console.warn('decide', e); } try { renderResumen(); } catch (e) {} }
   function decAbrir(id, fase, opcion) { DECUI = { id: fase ? id : null, fase: fase || null, opcion: opcion || null, err: '', enviando: false }; decPintar(); }
   function refrescarDecididas(d, forzar) {
-    if (!esCEO(d) || !key) return;
+    if (!puedeDecidir(d) || !key) return;
     if (!(d.decisiones_pendientes || []).some(function (x) { return x && x.pregunta; })) return;
     if (!forzar && Date.now() - DSRV.at < 5 * 60000) return;
     DSRV.at = Date.now();
@@ -1557,31 +1587,41 @@ details.mas > .in > * { min-width: 0; }
   }
   function decEnviar(x, codigo, nuevo) {
     DECUI.enviando = true; DECUI.err = ''; decPintar();
+    var dk = dkey();
     fetch('/api/decidir', { method: 'POST', cache: 'no-store', headers: { 'Content-Type': 'application/json', 'x-panel-key': key || '', 'x-decidir-codigo': codigo },
       body: JSON.stringify({ id: x.id, opcion: DECUI.opcion }) })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { s: r.status, j: j || {} }; }); })
       .then(function (res) {
         var s = res.s, j = res.j;
         // el código solo se guarda cuando el servidor ya lo aceptó (cualquier respuesta que no sea «código incorrecto»)
-        if (nuevo && [200, 400, 404, 409, 502].indexOf(s) >= 0) { try { localStorage.setItem(DKEY, codigo); } catch (e) {} }
+        if (nuevo && [200, 400, 404, 409, 502].indexOf(s) >= 0) { try { localStorage.setItem(dk, codigo); } catch (e) {} }
         if (s === 200 || s === 409) {
-          var v = s === 200 ? { opcion: j.opcion, f: j.f } : (j.ya || { opcion: DECUI.opcion, f: new Date().toISOString() });
-          decGuardaLocal(x.id, v); DSRV.contestadas[x.id] = { id: x.id, opcion: v.opcion, f: v.f };
+          var v = s === 200 ? { opcion: j.opcion, f: j.f, quien: j.quien, previas: j.previas || [] }
+            : (j.ya || { opcion: DECUI.opcion, f: new Date().toISOString(), quien: datosAct && datosAct.usuario });
+          decGuardaLocal(x.id, v); DSRV.contestadas[x.id] = { id: x.id, opcion: v.opcion, f: v.f, quien: v.quien, previas: v.previas || [] };
           DECUI = { id: null, fase: null, opcion: null, err: '', enviando: false }; decPintar(); return;
         }
         var msg = j.error || ('Error ' + s);
-        if (s === 401 && j.codigo === false) { try { localStorage.removeItem(DKEY); } catch (e) {} msg = 'Código para decidir incorrecto: escríbelo otra vez.'; }
+        if (s === 401 && j.codigo === false) { try { localStorage.removeItem(dk); } catch (e) {} msg = 'Código para decidir incorrecto: escríbelo otra vez.'; }
         else if (s === 401) msg = 'Tu sesión del panel ya no es válida: vuelve a entrar.';
         else if (s === 503) DSRV.listo = false;
         DECUI.enviando = false; DECUI.err = msg; decPintar();
       })
       .catch(function (e) { DECUI.enviando = false; DECUI.err = 'Sin conexión (' + e.message + '). Toca Enviar otra vez.'; decPintar(); });
   }
-  function decConfirma(x) {
-    var f = el('form', 'decc'), si = DECUI.opcion === x.recomendacion;
-    var q = el('div', 'q'); q.append(document.createTextNode((si ? '✓' : '✗') + ' Vas a contestar: '), el('b', null, '«' + quitaReco(DECUI.opcion) + '»'));
-    f.append(q, el('div', 't', 'Se contesta una sola vez y llega al sistema igual que si la contestaras en la oficina.'));
-    var cod = null; try { cod = localStorage.getItem(DKEY); } catch (e) {}
+  function decConfirma(x, hecha) {
+    var f = el('form', 'decc'), si = DECUI.opcion === x.recomendacion, q = el('div', 'q');
+    if (hecha) {   // Rodrigo cambia (o confirma) la de Carlo
+      var misma = hecha.opcion === DECUI.opcion;
+      q.append(document.createTextNode((si ? '✓' : '✗') + (misma ? ' Vas a confirmar como tuya la de Carlo: ' : ' Vas a cambiar la de Carlo («' + quitaReco(hecha.opcion) + '») por: ')), el('b', null, '«' + quitaReco(DECUI.opcion) + '»'));
+      f.append(q, el('div', 't', 'Tu respuesta manda: queda como la final (la de Carlo se guarda en el historial).'));
+    } else {
+      q.append(document.createTextNode((si ? '✓' : '✗') + ' Vas a contestar: '), el('b', null, '«' + quitaReco(DECUI.opcion) + '»'));
+      f.append(q, el('div', 't', esCarlo(datosAct)
+        ? 'Se contesta una sola vez y queda firmada como «Carlo». Rodrigo puede cambiarla después; si la cambia, manda la suya.'
+        : 'Se contesta una sola vez y llega al sistema igual que si la contestaras en la oficina.'));
+    }
+    var cod = null; try { cod = localStorage.getItem(dkey()); } catch (e) {}
     var inp = null;
     if (!cod) {
       inp = el('input'); inp.type = 'password'; inp.autocomplete = 'off'; inp.autocapitalize = 'off'; inp.spellcheck = false;
@@ -1603,28 +1643,52 @@ details.mas > .in > * { min-width: 0; }
     if (!DECUI.enviando) setTimeout(function () { try { (inp || env).focus({ preventScroll: true }); } catch (e) {} }, 30);
     return f;
   }
-  function decBloque(x, d) {
-    var hecha = decContestada(x.id);
-    if (hecha) {
-      var ok = el('div', 'decok'); ok.append(el('b', null, '✓ Contestada: '), document.createTextNode('«' + quitaReco(hecha.opcion) + '» · ' + cuandoCorto(hecha.f)));
-      ok.append(el('small', null, 'Ya no se puede contestar otra vez. El sistema la anota en la revisión de cada hora y sale de aquí.'));
-      return ok;
+  // «✓ Contestada por Carlo · opción · hora» (o «por Rodrigo»); si es de Carlo, Rodrigo ve el botón chico «cambiar»
+  function decHecha(x, hecha, d) {
+    var ok = el('div', 'decok' + (hecha.quien === 'Carlo' ? ' carlo' : ''));
+    ok.append(el('b', null, '✓ Contestada por ' + hecha.quien), document.createTextNode(' · «' + quitaReco(hecha.opcion) + '» · ' + cuandoCorto(hecha.f)));
+    var ant = (hecha.previas || []).filter(function (p) { return p.quien === 'Carlo' && p.opcion !== hecha.opcion; }).pop();
+    if (hecha.quien === 'Carlo') {
+      if (esCEO(d)) {
+        var cb = el('button', 'deccam', 'cambiar'); cb.type = 'button'; cb.disabled = DSRV.listo === false;
+        cb.title = DSRV.listo === false ? 'Falta activar tu código para decidir (PANEL_DECIDIR_CODIGO en Vercel)' : 'Contestar tú: tu respuesta manda';
+        cb.addEventListener('click', function () { decAbrir(x.id, 'cambiar'); });
+        ok.append(document.createTextNode(' '), cb);
+        ok.append(el('small', null, 'Carlo es socio: su respuesta vale. Si la cambias, manda la tuya.'));
+      } else ok.append(el('small', null, esCarlo(d) ? 'Tu respuesta vale. Rodrigo puede cambiarla; si la cambia, manda la suya.' : 'Rodrigo puede cambiarla.'));
+    } else {
+      ok.append(el('small', null, (ant ? 'Cambió la de Carlo («' + quitaReco(ant.opcion) + '»). ' : '') + 'Ya no se puede cambiar. El sistema la anota en la revisión de cada hora y sale de aquí.'));
     }
-    if (!esCEO(d)) return null;
+    return ok;
+  }
+  function decBloque(x, d) {
+    var hecha = decContestada(x);
+    var cambiando = !!(hecha && hecha.quien === 'Carlo' && esCEO(d) && DECUI.id === x.id && DECUI.fase);
+    if (hecha && !cambiando) return decHecha(x, hecha, d);
+    if (!puedeDecidir(d)) return null;
     var ops = (x.opciones || []).filter(function (o) { return typeof o === 'string' && o; });
-    if (ops.length < 2) return null;
-    if (DECUI.id === x.id && DECUI.fase === 'confirma') return decConfirma(x);
+    if (ops.length < 2) return hecha ? decHecha(x, hecha, d) : null;
+    if (DECUI.id === x.id && DECUI.fase === 'confirma') return decConfirma(x, cambiando ? hecha : null);
     var si = ops.indexOf(x.recomendacion) >= 0 ? x.recomendacion : null, otras = ops.filter(function (o) { return o !== si; });
     var apagado = DSRV.listo === false, cont = el('div'), fila = el('div', 'decb');
     var lista = DECUI.id === x.id && DECUI.fase === 'lista';
+    if (cambiando) {
+      var n = el('div', 'decl'); n.append(el('div', 't', 'Cambiar la de Carlo («' + quitaReco(hecha.opcion) + '»): elige la tuya. Si eliges la misma, la confirmas.'));
+      cont.append(n);
+    }
     if (si) fila.append(decBoton('si', '✓', quitaReco(si), function () { decAbrir(x.id, 'confirma', si); }, apagado));
     if (si && otras.length === 1) fila.append(decBoton('no', '✗', quitaReco(otras[0]), function () { decAbrir(x.id, 'confirma', otras[0]); }, apagado));
-    else fila.append(decBoton('no', '✗', si ? 'Otra opción (' + otras.length + ')' : 'Elegir opción (' + otras.length + ')', function () { decAbrir(x.id, lista ? null : 'lista'); }, apagado));
+    else fila.append(decBoton('no', '✗', si ? 'Otra opción (' + otras.length + ')' : 'Elegir opción (' + otras.length + ')', function () { decAbrir(x.id, lista ? (cambiando ? 'cambiar' : null) : 'lista'); }, apagado));
     cont.append(fila);
     if (lista) {
       var L = el('div', 'decl'); L.append(el('div', 't', si ? 'Elige la otra opción:' : 'Elige una opción:'));
       otras.forEach(function (o) { L.append(decBoton('no', '✗', quitaReco(o), function () { decAbrir(x.id, 'confirma', o); }, apagado)); });
       cont.append(L);
+    }
+    if (cambiando) {
+      var cc = el('button', 'deccam', 'Cancelar: dejar la de Carlo'); cc.type = 'button';
+      cc.addEventListener('click', function () { decAbrir(null); });
+      cont.append(cc);
     }
     return cont;
   }
@@ -1640,7 +1704,7 @@ details.mas > .in > * { min-width: 0; }
     }).sort(function (x, y) { return ms(y.t) - ms(x.t); }).slice(0, 3);
     // 19-nov auditoría: el número cuenta solo lo que TÚ tienes que hacer (decidir + tareas de hoy). Los avisos que ya te llegaron
     // al celular son informativos (algunos ya resueltos): van abajo, plegados, y no inflan el número.
-    var decsPend = decs.filter(function (x) { return !decContestada(x.id); });   // 22-nov: las contestadas aquí ya no cuentan
+    var decsPend = decs.filter(function (x) { return !decContestada(x); });   // 22-nov: las contestadas aquí (también por Carlo) ya no cuentan
     var n = decsPend.length + hoyT.length, hay = decs.length + hoyT.length;
     $('hoyN').textContent = n;
     RES.a = { n: n, decs: decsPend.length, tareas: hoyT.length, luego: luego.length, sinFoto: !d.oficina_vivo };
@@ -1652,13 +1716,17 @@ details.mas > .in > * { min-width: 0; }
     else {
       var G = el('div', 'hoyg');
       if (decs.length) {
-        var subD = esCEO(d)
+        // 22-nov b43600f: Carlo (socio) también decide; Rodrigo ve cuántas contestó Carlo (las puede cambiar)
+        var deCarlo = decs.filter(function (x) { var h = decContestada(x); return h && h.quien === 'Carlo'; }).length;
+        var subD = puedeDecidir(d)
           ? (!decsPend.length ? 'todas contestadas' : (decsPend.length === 1 ? '1 pregunta' : decsPend.length + ' preguntas') + ' · ✓ la recomendada · ✗ otra opción')
+            + (esCEO(d) && deCarlo ? ' · ' + deCarlo + ' de Carlo (puedes cambiarla' + (deCarlo === 1 ? ')' : 's)') : '')
           : (decs.length === 1 ? '1 pregunta · se contesta en la oficina' : decs.length + ' preguntas · se contestan en la oficina');
         var D = caja('Decide', subD), ol = el('ol', 'hoyl');
-        if (esCEO(d) && DSRV.listo === false && decsPend.length) D.append(el('p', 'decnota', 'Para contestar aquí falta activar tu código para decidir (variable PANEL_DECIDIR_CODIGO en Vercel). Mientras, contesta en la oficina.'));
+        if (esCEO(d) && DSRV.listo === false && (decsPend.length || deCarlo)) D.append(el('p', 'decnota', 'Para contestar aquí falta activar tu código para decidir (variable PANEL_DECIDIR_CODIGO en Vercel). Mientras, contesta en la oficina.'));
+        if (esCarlo(d) && DSRV.listo === false && decsPend.length) D.append(el('p', 'decnota', 'Para contestar aquí falta activar tu código para decidir: Rodrigo tiene que crear la variable PANEL_DECIDIR_CODIGO_CARLO en Vercel. Mientras, los botones quedan apagados.'));
         decs.forEach(function (x, i) {
-          var li = el('li', decContestada(x.id) ? 'hecha' : null); li.append(el('i', null, String(i + 1)));
+          var li = el('li', decContestada(x) ? 'hecha' : null); li.append(el('i', null, String(i + 1)));
           var c = el('div'), pq = el('div', 'pq todo', x.pregunta || ''); c.append(pq);
           if (x.recomendacion) {
             var rc = el('div', 'rc', 'Recomendado: '); rc.append(el('b', null, x.recomendacion));
