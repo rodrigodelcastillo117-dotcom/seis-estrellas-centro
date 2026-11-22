@@ -158,16 +158,16 @@ header.top .h b { color: var(--fg); font-weight: 700; }
 @media (max-width: 520px) { .carr { grid-auto-columns: 132px; gap: 10px; } }
 .sh { scroll-snap-align: start; display: grid; gap: 8px; align-content: start; min-width: 0; }
 .sh .vert { box-shadow: 0 0 0 1px var(--line2), 0 12px 26px -16px rgba(0,0,0,.8); border-radius: 16px; }
-.sh .vert .bdg { background: rgba(15, 8, 30, .78); font-size: 10px; padding: 3px 8px; }
+.sh .vert .bdg { background: rgba(15, 8, 30, .78); font-size: 11px; padding: 3px 8px; }
 .sh .vert .bdg::before { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
 .sh .vert .bdg.pg::before { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
 .sh .vert .bdg.top { left: auto; right: 8px; background: var(--grad); color: #1a0a14; }
 .sh .vert .bdg.top::before { display: none; }
 .sh .vert .vw { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 10px 8px; background: linear-gradient(180deg, transparent, rgba(8,4,18,.92)); font: 900 22px/1 var(--display); font-variant-numeric: tabular-nums; }
-.sh .vert .vw span { display: block; font: 600 10px var(--body); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
+.sh .vert .vw span { display: block; font: 600 11px var(--body); color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
 .sh .tt { font: 700 13px/1.25 var(--body); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.5em; }
 .chips { display: flex; flex-wrap: wrap; gap: 4px; }
-.ch { font: 800 10.5px var(--body); padding: 3px 6px; border-radius: 7px; background: rgba(255,255,255,.07); color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ch { font: 800 11px var(--body); padding: 3px 6px; border-radius: 7px; background: rgba(255,255,255,.07); color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .ch.pub { color: #0d2b1e; background: #3ddc97; } .ch.prog { color: #9be9ff; background: rgba(52,216,255,.14); } .ch.subido { color: #ffd79a; background: rgba(255,181,71,.14); }
 .ch.na { display: none; }
 .vacio2 { color: var(--muted); font-size: 14px; padding: 8px 2px; }
@@ -260,7 +260,7 @@ footer { font-size: 12px; color: var(--muted); text-align: center; }
 .post .pm b { color: var(--fg); font-weight: 600; }
 details.faltan { font-size: 12px; color: var(--muted); }
 details.faltan summary { cursor: pointer; }
-.duo { display: grid; gap: 14px; }
+.duo { display: grid; gap: 14px; align-items: start; }   /* be4b89e: «Próximo en salir» ya no se estira al alto de Rendimiento */
 @media (min-width: 980px) { .duo { grid-template-columns: 1fr 1fr; } }
 
 /* la oficina compacta (personajes de bloques: dibujos propios, no marcas) */
@@ -273,10 +273,10 @@ details.faltan summary { cursor: pointer; }
 .puesto.sel { border-color: var(--orange); box-shadow: 0 0 0 2px rgba(255,154,60,.35); }
 .puesto svg { width: 100%; max-width: 84px; height: auto; display: block; margin: 0 auto; }
 @media (prefers-reduced-motion: no-preference) { .puesto .manoI { animation: tecla .5s ease-in-out infinite alternate; } .puesto .manoD { animation: tecla .5s .25s ease-in-out infinite alternate; } .puesto .pant { animation: parpa 2.4s steps(2) infinite; } .puesto.quieto .manoI, .puesto.quieto .manoD { animation: none; } @keyframes tecla { to { transform: translateY(-2.5px); } } @keyframes parpa { 50% { opacity: .55; } } }
-.burbuja { display: block; margin: 3px auto 0; font-size: 9px; font-weight: 700; padding: 2px 5px; border-radius: 999px; background: rgba(255,255,255,.08); color: var(--muted); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.burbuja { display: block; margin: 3px auto 0; font-size: 11px; font-weight: 700; padding: 2px 5px; border-radius: 999px; background: rgba(255,255,255,.08); color: var(--muted); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .burbuja.on { color: var(--ok); } .burbuja.ceo { color: var(--orange); } .burbuja.mal { color: #fff; background: var(--bad); }
 .puesto .nm { font-family: var(--display); font-weight: 800; font-size: 14px; line-height: 1.05; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.puesto .rl { font-size: 8.5px; line-height: 1.2; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.4em; }
+.puesto .rl { font-size: 11px; line-height: 1.2; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.4em; }
 .ficha { margin-top: 12px; }
 .ficha h3 { margin: 0; font-family: var(--display); font-size: 24px; }
 .ficha .sub { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
@@ -334,7 +334,7 @@ details.faltan summary { cursor: pointer; }
 .ova .who { min-width: 0; flex: 1 1 auto; }
 .ova .nm { font: 800 16px/1.1 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ova .pu { font: 600 11px/1.2 var(--body); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.est { flex: 0 0 auto; font: 900 10.5px/1.35 var(--body); letter-spacing: .06em; padding: 2px 8px; border-radius: 7px; color: #120a1f; background: var(--c, #ffd9a8); white-space: nowrap; }
+.est { flex: 0 0 auto; font: 900 11px/1.35 var(--body); letter-spacing: .06em; padding: 2px 8px; border-radius: 7px; color: #120a1f; background: var(--c, #ffd9a8); white-space: nowrap; }
 .ova .an { font: 700 12.5px/1.35 var(--body); overflow-wrap: anywhere; }
 .ova .an.mal { color: #ff9db0; } .ova .an.top { color: var(--yellow); }
 .ova .ln { font-size: 12.5px; line-height: 1.4; color: var(--fg); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
@@ -376,7 +376,7 @@ details.faltan summary { cursor: pointer; }
 .etp b { display: block; font: 900 26px/1 var(--display); font-variant-numeric: tabular-nums; }
 .etp span { display: block; font: 700 11px var(--body); color: var(--muted); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .etp.cero b { color: var(--dim); }
-@media (max-width: 420px) { .etp { padding: 9px 2px 8px; } .etp span { font-size: 10px; } }
+@media (max-width: 420px) { .etp { padding: 9px 2px 8px; } .etp span { font-size: 11px; } }
 .etp.hay { border-color: rgba(255,122,69,.45); background: rgba(255,122,69,.08); }
 .etp:not(:nth-child(4n+1))::before { content: "›"; position: absolute; left: -8px; top: 50%; transform: translateY(-55%); color: var(--dim); font: 800 14px var(--body); }
 .ovpie { margin: 0; font-size: 12px; color: var(--dim); }
@@ -402,7 +402,7 @@ details.faltan summary { cursor: pointer; }
 .hoyl .pq.tarea.todo { cursor: auto; }
 .hoyl .rc { margin-top: 4px; font-size: 12px; color: var(--muted); }
 .hoyl .rc b { color: var(--ok); font-weight: 700; }
-.hoyl .cu { display: inline-block; margin-left: 6px; font: 800 10.5px/1.5 var(--body); padding: 0 7px; border-radius: 7px; background: rgba(255,154,60,.16); color: #ffd2a8; white-space: nowrap; vertical-align: 1px; }
+.hoyl .cu { display: inline-block; margin-left: 6px; font: 800 11px/1.5 var(--body); padding: 0 7px; border-radius: 7px; background: rgba(255,154,60,.16); color: #ffd2a8; white-space: nowrap; vertical-align: 1px; }
 .hoyl .f { color: var(--dim); font-size: 12px; white-space: nowrap; }
 /* 22-nov (CEO: «aquí debería de poder decidir también con una palomita o tache»): ✓ = la recomendada · ✗ = otra opción */
 .decb { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 8px; margin-top: 10px; }
@@ -451,7 +451,7 @@ details.faltan summary { cursor: pointer; }
 .mt .amb { font-size: 11.5px; color: var(--dim); }
 .mt .bar { height: 8px; }
 .mt .pie { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; font: 700 12px var(--body); color: var(--muted); font-variant-numeric: tabular-nums; }
-.rit { font: 800 10.5px/1.5 var(--body); padding: 0 8px; border-radius: 999px; white-space: nowrap; }
+.rit { font: 800 11px/1.5 var(--body); padding: 0 8px; border-radius: 999px; white-space: nowrap; }
 .rit.ad { color: #0d2b1e; background: var(--ok); } .rit.at { color: #2b1a00; background: var(--warn); }
 .mt.n1 { grid-column: 1 / -1; background: linear-gradient(160deg, rgba(255,61,139,.28), rgba(255,154,60,.12)), var(--glass2); border-color: rgba(255,61,139,.45); }
 @media (min-width: 900px) { .mt.n1 { grid-column: span 2; } }
@@ -472,16 +472,16 @@ details.faltan summary { cursor: pointer; }
 .pe { flex: 1 1 0; min-width: 0; text-align: center; padding: 8px 4px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid var(--line); }
 .pe b { display: block; font: 900 24px/1 var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pe span { display: block; font: 700 11px/1.2 var(--body); color: var(--muted); margin-top: 4px; }
-.pe .sub { font-weight: 600; font-size: 10.5px; color: var(--dim); margin-top: 2px; }
+.pe .sub { font-weight: 600; font-size: 11px; color: var(--dim); margin-top: 2px; }
 .fl { flex: 0 0 auto; align-self: center; display: grid; justify-items: center; min-width: 34px; font: 800 11px/1.2 var(--body); color: var(--muted); font-variant-numeric: tabular-nums; }
 .fl::before { content: "→"; font-size: 15px; color: var(--dim); }
 .fl.mal { color: var(--bad); } .fl.mal::before { color: var(--bad); }
 .embc { border-radius: 12px; padding: 8px 12px; font-size: 13px; font-weight: 700; line-height: 1.4; color: #ffe1ea; background: rgba(255, 92, 122, .12); border: 1px solid rgba(255, 92, 122, .5); overflow-wrap: anywhere; }
 .embn { font-size: 12px; color: var(--muted); line-height: 1.4; overflow-wrap: anywhere; }
-@media (max-width: 520px) { .pe b { font-size: 19px; } .pe { padding: 7px 2px; } .pe span { font-size: 10.5px; } .fl { min-width: 30px; font-size: 10.5px; } }
+@media (max-width: 520px) { .pe b { font-size: 19px; } .pe { padding: 7px 2px; } .pe span { font-size: 11px; } .fl { min-width: 30px; font-size: 11px; } }
 
 /* 19-nov · XP de cada agente y premios de la semana */
-.ova .nv { flex: 0 0 auto; font: 800 10.5px/1.5 var(--body); padding: 1px 7px; border-radius: 7px; background: rgba(255,210,63,.12); color: var(--yellow); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ova .nv { flex: 0 0 auto; font: 800 11px/1.5 var(--body); padding: 1px 7px; border-radius: 7px; background: rgba(255,210,63,.12); color: var(--yellow); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .ova .ln.sem { color: var(--muted); font-variant-numeric: tabular-nums; }
 .ova .ln.sem .mal { color: var(--bad); font-weight: 700; }
 .prem ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
@@ -528,12 +528,20 @@ details.faltan summary { cursor: pointer; }
 .pl li { display: grid; grid-template-columns: 52px 30px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13px; }
 .pl li:first-child { border-top: 0; padding-top: 0; }
 .pl .hr { font-weight: 800; font-variant-numeric: tabular-nums; }
-.pl .rd { font: 900 10.5px/1.6 var(--body); text-align: center; border-radius: 6px; color: #120a1f; }
+.pl .rd { font: 900 11px/1.6 var(--body); text-align: center; border-radius: 6px; color: #120a1f; }
 .pl .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pl .t a { color: var(--fg); text-decoration: none; }
 .pl .v { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .pl .v small { font-weight: 600; color: var(--muted); }
 .plnota { font-size: 12px; color: var(--muted); margin-top: 8px; }
+/* be4b89e: «lo que sale» agrupado por video (un renglón con sus redes) · calendario: copias sin hora y días pasados plegados · títulos en 2 líneas en el celular */
+.pl li.gr { grid-template-columns: 52px auto minmax(0, 1fr); }
+.pl li.gr .reds { display: flex; gap: 3px; flex-wrap: wrap; }
+.pl li.gr .reds .rd { padding: 0 5px; }
+.pl li.gr .t { white-space: normal; overflow: visible; }
+details.calpl { margin: 8px 0; } details.calpl > summary { cursor: pointer; font-size: 13px; font-weight: 700; color: var(--muted); padding: 4px 0; }
+.vid.vieja .tt div:first-child { color: var(--muted); }
+@media (max-width: 520px) { .vid .tt div:first-child { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; } }
 .falla { border-color: rgba(255,92,122,.35); }
 .fl2 { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .fl2 li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 13.5px; line-height: 1.4; padding: 9px 10px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid var(--line); overflow-wrap: anywhere; }
@@ -565,6 +573,22 @@ details.mas > .in > * { min-width: 0; }
 .vv.sd, .big.sd, .sm.sd, .n.sd { color: var(--dim) !important; font-size: .62em; }
 .kpi .v.sd { color: var(--dim); font-size: 24px; }
 .kpi .s.viejo { color: var(--warn); }
+/* b7d70cf (23-nov): celular — toques de 44 px, títulos de sección que no parten la flecha, letra mínima 11 px */
+.iconbtn, .fresco { min-height: 44px; }
+.iconbtn { padding-inline: 14px; justify-content: center; min-width: 44px; }
+/* b2ef589 (22-nov, al juntar parches): el «Ver los N siguientes» de be4b89e nació después del repaso de 44 px */
+details.calpl > summary { padding-block: 14px; display: flex; align-items: center; }
+.ovbtn.chico { min-height: 44px; }
+.hoy details summary, details.faltan summary, summary.plnota { padding-block: 13px; margin-block: 0; }
+details.mas > summary > span { min-width: 0; max-width: calc(100% - 28px); }
+.pl .v small, .vv.sd small { font-size: 11.5px; }
+.burbuja.mal { color: #1a0a14; }
+@media (pointer: coarse) {
+  /* áreas de toque de 44 px sin mover nada: el relleno entra en la caja del enlace (que recorta con «…») y el margen negativo lo compensa */
+  .post .pt a, .barr .row a, .ops .item .t a, .row a, li > .t a { padding-block: 14px; margin-block: -14px; }
+  .vid .tt .m a { position: relative; }
+  .vid .tt .m a::after { content: ""; position: absolute; inset: -14px -4px; }
+}
 </style>
 </head>
 <body>
@@ -814,6 +838,7 @@ details.mas > .in > * { min-width: 0; }
         <a href="https://studio.youtube.com/" target="_blank" rel="noopener">YouTube Studio<span>Contenido, estadísticas y comentarios</span></a>
         <a href="https://www.instagram.com/seisestrellasmx/" target="_blank" rel="noopener">Instagram<span>@seisestrellasmx</span></a>
         <a href="https://www.facebook.com/profile.php?id=1492644487258015" target="_blank" rel="noopener">Facebook<span>Página Seis Estrellas</span></a>
+        <a href="https://www.tiktok.com/@seisestrellasmx" target="_blank" rel="noopener">TikTok<span>@seisestrellasmx</span></a>
         <a href="https://claude.ai/artifact/9Yh6VdjH92p6hwbVhtpqei" target="_blank" rel="noopener">Kit de lanzamiento<span>Guía, guiones y ficha del canal</span></a>
         <a href="https://drive.google.com/drive/folders/1Q9pMKFZu6wJB4cLgoT9zI3VzrbFZyL3b" target="_blank" rel="noopener">Carpeta de gameplay<span>Aquí sube tu amigo sus clips</span></a>
         <a href="https://drive.google.com/drive/folders/1H4njq7E9UxDtQdORIyrK1sCJbS6lw6uf" target="_blank" rel="noopener">Carpeta del canal<span>Logo, banner y respaldos</span></a>
@@ -836,7 +861,9 @@ details.mas > .in > * { min-width: 0; }
     { who: 'Claude', t: 'Subir y programar los Shorts y videos largos aprobados (YouTube y Facebook)', when: 'Todos los días · 02:10' },
     { who: 'Claude', t: 'Reels de la cola en Instagram, Facebook y TikTok, y foto de métricas para este panel', when: 'Cada hora' },
     { who: 'Claude', t: 'Noticias de GTA 6 con link en el Drive', when: '3 veces al día' },
-    { who: 'Vigía', t: 'Revisar vistas, comentarios y seguidores por video y corregir lo que se cae', when: 'Cada 3 h' },
+    { who: 'Claude', t: 'Revisión de cada hora: Vigía (vistas y comentarios por video), Post-venta, Auditor y cola de Reels', when: 'Cada hora · :07' },
+    { who: 'Auditor', t: 'Auditoría a fondo de todo el canal', when: '10:53 y 22:53' },
+    { who: 'Mejora continua', t: 'Una mejora medida por red', when: '12:47 y 18:47' },
     { who: 'Marketing', t: 'Radar viral del nicho y revisión de tags y hashtags', when: '10:37 y 18:37' },
     { who: 'Claude', t: 'Revisar la carpeta de gameplay y convertir cada clip en Short', when: 'Desde el jue 19 nov' },
     { who: 'Tú', t: 'Fijar el comentario del canal en cada video nuevo', when: 'Cuando sale cada video' }
@@ -995,7 +1022,7 @@ details.mas > .in > * { min-width: 0; }
       var ref = s.ref, d0;
       if (ref && n.v != null && ref[1] != null) {
         var dv = n.v - ref[1], ds = (n.seg != null && ref[2] != null) ? n.seg - ref[2] : null;
-        var cuando = s.ref_es_ayer ? 'en 24 h' : 'desde ' + (dayKey.format(new Date(ref[0])) === dayKey.format(new Date()) ? 'las ' : 'ayer ') + fmtHr.format(new Date(ref[0]));
+        var cuando = s.ref_es_ayer ? 'en 24 h' : (s.ref_horas != null && s.ref_horas > 30 ? 'en ' + s.ref_horas + ' h (falta la foto de hace 24 h)' : 'desde ' + (dayKey.format(new Date(ref[0])) === dayKey.format(new Date()) ? 'las ' : 'ayer ') + fmtHr.format(new Date(ref[0])));
         d0 = el('div', 's d ' + (dv > 0 || ds > 0 ? 'up' : 'mu'), fmtSigned(dv) + ' vistas' + (ds ? ' · ' + fmtSigned(ds) + ' ' + n.segN : '') + ' ' + cuando);
       } else d0 = el('div', 's d mu', k === 'tt' && n.v == null ? 'vistas: sin dato (Publer todavía no las entrega)' : 'sin historial todavía');
       c.append(d0, spark(s.puntos ? s.puntos.map(function (p) { return [p[0], p[1]]; }) : [], RED[k].c));
@@ -1209,7 +1236,7 @@ details.mas > .in > * { min-width: 0; }
     var A = $('opsAlertas'); A.replaceChildren();
     (of.alertas || []).forEach(function (t) { A.append(el('div', 'aviso', t)); });
     var S = $('ops'); S.replaceChildren();
-    var px = of.proximas || [];
+    var px = (of.proximas || []).filter(function (it) { var t = Date.parse(it.cuando); return isNaN(t) || t > Date.now() - 60000; });
     if (!px.length) S.append(el('div', 'empty', 'No hay nada programado.'));
     px.forEach(function (it) {
       var r = el('div', 'item');
@@ -1405,8 +1432,8 @@ details.mas > .in > * { min-width: 0; }
     var Or = O.ordenes || null;
     if (Or && Array.isArray(Or.lista)) {
       JB.append(el('div', 'ovsub', 'Órdenes del CEO'));
-      JB.append(el('div', 'ovpie', [plural(Or.activas || 0, 'activa', 'activas'), plural(Or.fallando || 0, 'fallando', 'fallando'), plural(Or.abiertas || 0, 'abierta', 'abiertas'),
-        plural(Or.cumpliendo || 0, 'permanente al día', 'permanentes al día'), plural(Or.cumplidas_hoy || 0, 'cumplida hoy', 'cumplidas hoy')].join(' · ') + (Or.t ? ' · revisadas ' + hz(Or.t) : '')));
+      JB.append(el('div', 'ovpie', [plural(Or.activas || 0, 'activa', 'activas'), plural(Or.fallando || 0, 'fallando', 'fallando'), plural(Or.abiertas || 0, 'abierta', 'abiertas'), Or.esperando_ceo ? plural(Or.esperando_ceo, 'esperando al CEO', 'esperando al CEO') : '',
+        plural(Or.cumpliendo || 0, 'permanente al día', 'permanentes al día'), plural(Or.cumplidas_hoy || 0, 'cumplida hoy', 'cumplidas hoy')].filter(Boolean).join(' · ') + (Or.t ? ' · revisadas ' + hz(Or.t) : '')));
       var ulo = el('ul', 'ovl'), ver = Or.lista.filter(function (o) { return o.estado !== 'cumplida' || !o.permanente; }).slice(0, 8);
       if (!ver.length) ulo.append(el('li', null, '✓ Todas las órdenes al día.'));
       var venceTxt = function (s) {  // fecha futura: "vence en 5 h"; pasada: "venció hace 2 h"
@@ -1416,9 +1443,10 @@ details.mas > .in > * { min-width: 0; }
       };
       ver.forEach(function (o) {
         var mal = o.estado === 'en_junta' || o.estado === 'fallando', li = el('li');
-        li.append(el('span', mal ? 'mal' : (o.estado === 'cumplida' ? 'ok' : 'q'), (mal ? '✗ ' : o.estado === 'cumplida' ? '✓ ' : '◷ ') + (o.estado === 'en_junta' ? 'en junta' : o.estado) + ' '),
+        li.append(el('span', mal ? 'mal' : (o.estado === 'cumplida' ? 'ok' : 'q'), (mal ? '✗ ' : o.estado === 'cumplida' ? '✓ ' : '◷ ') + (o.estado === 'en_junta' ? 'en junta' : o.estado === 'esperando_ceo' ? 'esperando al CEO' : o.estado) + ' '),
           document.createTextNode('«' + (o.texto || '') + '» '), el('span', 'f', '· ' + (nom[o.dueno] || o.dueno || '') + (o.permanente ? ' · siempre' : (o.vence ? ' · ' + venceTxt(o.vence) : ''))));
-        if (o.evidencia) { var r = el('span', 'r', '→ ' + o.evidencia); r.title = o.evidencia; li.append(r); }
+        if (o.estado === 'esperando_ceo' && o.pedido) { var rp = el('span', 'r', 'Pide: ' + o.pedido); rp.title = o.pedido; li.append(rp); }
+        else if (o.evidencia) { var r = el('span', 'r', '→ ' + o.evidencia); r.title = o.evidencia; li.append(r); }
         ulo.append(li);
       });
       JB.append(ulo);
@@ -1513,9 +1541,31 @@ details.mas > .in > * { min-width: 0; }
     var p = partesCDMX(Date.now());
     return new RegExp('(^|[^0-9])' + p.d + ' ' + MESES[p.mo - 1]).test(s);
   }
+  // 22-nov b42af64: los textos de decisiones/tareas traen horas en UTC («22-nov 02:51Z»); el panel es todo hora CDMX
+  function zCDMX(s) {
+    return String(s == null ? '' : s).replace(/\b(\d{1,2})-(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic) (\d{1,2}):(\d{2})\s?Z\b/g, function (m, d, mo, h, mi) {
+      var i = MESES.indexOf(mo), t = Date.UTC(new Date().getUTCFullYear(), i, +d, +h, +mi), p = partesCDMX(t);
+      return p.d + '-' + MESES[p.mo - 1] + ' ' + (p.h < 10 ? '0' : '') + p.h + ':' + (p.mi < 10 ? '0' : '') + p.mi + ' CDMX';
+    });
+  }
+  // 22-nov b2ef589 (al juntar parches): las bitácoras de la oficina (juntas, agentes, avisos) también traen «22-nov 20:56Z» y «16:13Z»; todo el panel va en hora CDMX
+  function zTodoCDMX() {
+    var hoyP = partesCDMX(Date.now());
+    ['hoy', 'ov', 'falla', 'mAuto'].forEach(function (id) {
+      var raiz = $(id); if (!raiz) return;
+      var w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT), n, lista = [];
+      while ((n = w.nextNode())) if (/\d:\d\d\s?Z\b/.test(n.nodeValue)) lista.push(n);
+      lista.forEach(function (t) {
+        t.nodeValue = zCDMX(t.nodeValue).replace(/\b(\d{1,2}):(\d{2})\s?Z\b/g, function (m, h, mi) {
+          var p = partesCDMX(Date.UTC(new Date().getUTCFullYear(), hoyP.mo - 1, hoyP.d, +h, +mi));
+          return (p.h < 10 ? '0' : '') + p.h + ':' + (p.mi < 10 ? '0' : '') + p.mi + ' CDMX';
+        });
+      });
+    });
+  }
   // 19-nov auditoría: una tarea larga (p. ej. 18 links) se ve en 3 renglones; tocándola se abre completa
   function tareaCEO(t) {
-    var c = el('div'), tx = el('div', 'pq tarea', t.t);
+    var c = el('div'), tx = el('div', 'pq tarea', zCDMX(t.t));
     if (t.cuando) c.append(el('span', 'cu', t.cuando));
     c.prepend(tx);
     if (String(t.t).length > 160) { tx.title = 'Toca para ver todo'; tx.tabIndex = 0; var f = function () { tx.classList.toggle('todo'); }; tx.addEventListener('click', f); tx.addEventListener('keydown', function (e) { if (e.key === 'Enter') f(); }); }
@@ -1727,11 +1777,12 @@ details.mas > .in > * { min-width: 0; }
         if (esCarlo(d) && DSRV.listo === false && decsPend.length) D.append(el('p', 'decnota', 'Para contestar aquí falta activar tu código para decidir: Rodrigo tiene que crear la variable PANEL_DECIDIR_CODIGO_CARLO en Vercel. Mientras, los botones quedan apagados.'));
         decs.forEach(function (x, i) {
           var li = el('li', decContestada(x) ? 'hecha' : null); li.append(el('i', null, String(i + 1)));
-          var c = el('div'), pq = el('div', 'pq todo', x.pregunta || ''); c.append(pq);
+          var c = el('div'), pq = el('div', 'pq todo', zCDMX(x.pregunta)); c.append(pq);
           if (x.recomendacion) {
-            var rc = el('div', 'rc', 'Recomendado: '); rc.append(el('b', null, x.recomendacion));
+            var qr = function (o) { return String(o).replace(/\s*\(Recomendad[oa]\)\s*$/i, ''); };   // 22-nov b42af64: «Recomendado: … (Recomendado)» salía repetido
+            var rc = el('div', 'rc', 'Recomendado: '); rc.append(el('b', null, qr(x.recomendacion)));
             var otras = (x.opciones || []).filter(function (o) { return o !== x.recomendacion; });
-            if (otras.length) rc.append(document.createTextNode(' · otra opción: ' + otras.join(' / ')));
+            if (otras.length) rc.append(document.createTextNode(' · otra opción: ' + otras.map(qr).join(' / ')));
             c.append(rc);
           }
           if (x.por_que) { var dt = el('details'), sm = el('summary', null, 'Por qué'); dt.append(sm, el('div', 'rc', x.por_que)); dt.style.marginTop = '4px'; c.append(dt); }
@@ -1874,6 +1925,7 @@ details.mas > .in > * { min-width: 0; }
     try { renderMetas(d.oficina_vivo); } catch (e) { console.warn('metas', e); }
     try { renderEmbudo(d.oficina_vivo); } catch (e) { console.warn('embudo', e); }
     try { renderOV(d); } catch (e) { console.warn('oficina en vivo', e); }
+    try { pintaTareas(d.oficina_vivo); } catch (e) { console.warn('automatización', e); }
     try { renderFabrica(F, F && F.act); } catch (e) { console.warn('fabrica', e); }
     try { renderRedes(d, F); } catch (e) { console.warn('redes', e); }
     try { renderOficina(d.oficina || (d.ig && d.ig._of)); } catch (e) { console.warn('oficina', e); }
@@ -1881,6 +1933,7 @@ details.mas > .in > * { min-width: 0; }
     try { renderSalio(d); } catch (e) { console.warn('salió hoy', e); }
     try { renderFalla(d); } catch (e) { console.warn('qué falla', e); }
     try { renderResumen(); } catch (e) { console.warn('resumen', e); }
+    try { zTodoCDMX(); } catch (e) { console.warn('horas CDMX', e); }
 
     var reels = ig.reels || [], fbv = (fb.videos || []).filter(function (x) { return x.pub !== false; });
     var shorts = pub.filter(esShort);
@@ -1902,7 +1955,7 @@ details.mas > .in > * { min-width: 0; }
     ], igBest ? [igBest.t, fmtNum(igBest.v) + ' vistas'] : null, ig.act, 2));
     P.append(plat('Facebook', '#1877f2', [
       ['Seguidores · total', fmtNum(fb.pagina && fb.pagina.seg)], ['Vistas de videos · total', fmtNum(sumN(fbv, fbVis))],
-      ['Vistas de la página · 7 días', fmtNum(fb.dias && fb.dias.page_media_view && fb.dias.page_media_view['7d'])], ['Interacciones · 7 días', fmtNum(fb.dias && fb.dias.page_post_engagements && fb.dias.page_post_engagements['7d'])]
+      ['Vistas del contenido · 7 días', fmtNum(fb.dias && fb.dias.page_media_view && fb.dias.page_media_view['7d'])], ['Interacciones · 7 días', fmtNum(fb.dias && fb.dias.page_post_engagements && fb.dias.page_post_engagements['7d'])]
     ], fbBest ? [fbBest.t, fmtNum(fbVis(fbBest)) + ' vistas'] : null, fb.act, 2));
     var tt = d.tt || (d.ig && d.ig._tt) || {}, ttv = tt.videos || [], ttc = tt.cuenta || {};
     var ttBest = ttv.slice().sort(function (a, b) { return (b.v || 0) - (a.v || 0); })[0];
@@ -1945,7 +1998,7 @@ details.mas > .in > * { min-width: 0; }
     if (!up) { nx.append(el('div', 'empty', y.fuente === 'vivo' ? 'No hay videos programados.' : 'Sin datos en vivo de programados ahora mismo.')); }
     else {
       var loc = (F && (F.listos || []).concat(F.publicados || []).filter(function (x) { return x.yt_id === up.id && x.img; })[0]) || null;
-      var img = el('img'); img.alt = ''; img.loading = 'lazy'; img.onerror = function () { img.style.visibility = 'hidden'; };
+      var img = el('img'); img.alt = 'Portada de «' + up.t + '»'; img.loading = 'lazy'; img.onerror = function () { img.style.visibility = 'hidden'; };
       img.src = loc ? imgUrl(loc.img, F.act) : 'https://i.ytimg.com/vi/' + up.id + '/mqdefault.jpg';
       if (loc) { img.style.aspectRatio = '9/16'; img.style.width = '72px'; }
       var box = el('div');
@@ -1997,8 +2050,8 @@ details.mas > .in > * { min-width: 0; }
     $('fbWhen').textContent = fb.act ? 'datos ' + hace(fb.act) : '';
     var fm = $('fbMini'); fm.replaceChildren();
     var dd = fb.dias || {};
-    [['Seguidores · total', fb.pagina && fb.pagina.seg], ['Vistas de la página · 7 días', dd.page_media_view && dd.page_media_view['7d']],
-     ['Vistas de video · 7 días', dd.page_video_views && dd.page_video_views['7d']], ['Interacciones · 7 días', dd.page_post_engagements && dd.page_post_engagements['7d']],
+    [['Seguidores · total', fb.pagina && fb.pagina.seg], ['Vistas del contenido · 7 días', dd.page_media_view && dd.page_media_view['7d']],
+     ['Vistas de video · 7 días (Meta ya no lo cuenta)', dd.page_video_views && dd.page_video_views['7d']], ['Interacciones · 7 días', dd.page_post_engagements && dd.page_post_engagements['7d']],
      ['Seguidores nuevos · 7 días', dd.page_daily_follows_unique && dd.page_daily_follows_unique['7d']]].forEach(function (x) {
       var d0 = el('div'); d0.append(el('b', null, fmtNum(x[1])), el('span', null, x[0])); fm.append(d0);
     });
@@ -2022,24 +2075,49 @@ details.mas > .in > * { min-width: 0; }
     });
 
     var cal = $('cal'); cal.replaceChildren();
-    var items = vids.map(function (v) { var e = estado(v); return { v: v, e: e, t: e.at ? new Date(e.at) : null }; })
-      .sort(function (a, b) { return (a.t ? a.t.getTime() : 9e15) - (b.t ? b.t.getTime() : 9e15); });
+    // be4b89e: el calendario también trae lo que la tanda de las 02:10 CDMX todavía va a subir (plan_yt, de cola_yt.py) y marca las copias viejas que se reemplazan
+    var PY = (d.oficina && d.oficina.plan_yt) || {}, quitar = {}, enYT = {};
+    (PY.quitar || []).forEach(function (i) { quitar[i] = 1; });
+    vids.forEach(function (v) { if (v.prog) enYT[v.prog.slice(0, 16) + '|' + v.t] = 1; });
+    var items = vids.map(function (v) { var e = estado(v); return { v: v, e: e, t: e.at ? new Date(e.at) : null }; });
+    (PY.por_subir || []).forEach(function (p) {
+      if (Date.parse(p.at) < Date.now() || enYT[p.at.slice(0, 16) + '|' + p.t]) return;
+      items.push({ v: { id: null, t: p.t, priv: 'plan', plan: p }, e: { txt: 'Por subir', cls: 'proc', at: p.at }, t: new Date(p.at) });
+    });
+    items.sort(function (a, b) { return (a.t ? a.t.getTime() : 9e15) - (b.t ? b.t.getTime() : 9e15); });
     if (!items.length) cal.append(el('div', 'empty', 'Aún no hay videos en el canal.'));
-    var curKey = null, dayBox = null;
+    var curKey = null, dayBox = null, hoyKey = dayKey.format(new Date()), pasBox = null, sinBox = null, nPas = 0, nSin = 0;
     items.forEach(function (it) {
-      var k = it.t ? dayKey.format(it.t) : 'sin-fecha';
-      if (k !== curKey) { curKey = k; dayBox = el('div', 'day'); dayBox.append(el('h3', null, it.t ? fmtDay.format(it.t) : 'Sin fecha')); cal.append(dayBox); }
-      var row = el('div', 'vid');
+      var k = it.t ? dayKey.format(it.t) : 'sin-fecha', vieja = !it.t && it.v.priv !== 'retirado' && it.v.priv !== 'plan';
+      if (vieja) {   // privados sin hora: copias viejas o reemplazadas; no salen
+        if (!sinBox) { sinBox = el('details', 'calpl'); sinBox.append(el('summary')); }
+        nSin++;
+      } else if (k !== curKey) {
+        curKey = k; dayBox = el('div', 'day'); dayBox.append(el('h3', null, it.t ? fmtDay.format(it.t) : 'Sin fecha'));
+        if (it.t && k < hoyKey) { if (!pasBox) { pasBox = el('details', 'calpl'); pasBox.append(el('summary')); cal.append(pasBox); } pasBox.append(dayBox); }
+        else cal.append(dayBox);
+      }
+      if (it.t && k < hoyKey) nPas++;
+      var row = el('div', 'vid' + (vieja || (it.v.id && quitar[it.v.id]) ? ' vieja' : ''));
       row.append(el('div', 'hr', it.t ? fmtHr.format(it.t) : '—'));
       var tt2 = el('div', 'tt'); tt2.append(el('div', null, it.v.t));
       var m = el('div', 'm');
-      if (it.v.priv === 'public') { var w = el('a', null, 'Ver'); w.href = 'https://www.youtube.com/watch?v=' + it.v.id; w.target = '_blank'; w.rel = 'noopener'; m.append(w); }
-      var s = el('a', null, 'Studio'); s.href = 'https://studio.youtube.com/video/' + it.v.id + '/edit'; s.target = '_blank'; s.rel = 'noopener'; m.append(s);
-      m.append(document.createTextNode(it.v.priv === 'public' ? fmtNum(it.v.v) + ' vistas · ' + fmtNum(it.v.l) + ' likes · ' + fmtNum(it.v.c) + ' com.' + (it.v.pct != null ? ' · ' + Math.round(it.v.pct) + '% visto' : '') : (it.v.priv === 'retirado' ? 'ya no está público (privado o reemplazado)' : vencido(it.v) ? 'su hora pasó y no aparece publicado' : 'todavía no sale')));
+      if (it.v.priv === 'public') { var w = el('a', null, 'Ver'); w.href = 'https://www.youtube.com/' + (esShort(it.v) ? 'shorts/' : 'watch?v=') + it.v.id; w.target = '_blank'; w.rel = 'noopener'; m.append(w); }
+      if (it.v.id) { var s = el('a', null, 'Studio'); s.href = 'https://studio.youtube.com/video/' + it.v.id + '/edit'; s.target = '_blank'; s.rel = 'noopener'; m.append(s); }
+      var txt;
+      if (it.v.priv === 'public') txt = fmtNum(it.v.v) + ' vistas · ' + fmtNum(it.v.l) + ' likes · ' + fmtNum(it.v.c) + ' com.' + (it.v.pct != null ? ' · ' + Math.round(it.v.pct) + '% visto' : '');
+      else if (it.v.priv === 'plan') txt = 'la sube la tanda ' + fmtFull.format(new Date(it.v.plan.tanda + 'T08:10:00Z')) + (it.v.plan.metodo === 'reemplazo' ? ' (reemplaza una copia vieja)' : '');
+      else if (it.v.priv === 'retirado') txt = 'ya no está público (privado o reemplazado)';
+      else if (vieja) txt = 'copia privada sin hora: no sale';
+      else if (vencido(it.v)) txt = 'su hora pasó y no aparece publicado';
+      else txt = it.v.id && quitar[it.v.id] ? 'copia vieja: la tanda la reemplaza por la nueva' : 'todavía no sale';
+      m.append(document.createTextNode(txt));
       tt2.append(m);
-      row.append(tt2, el('span', 'pill ' + it.e.cls, it.e.txt));
-      dayBox.append(row);
+      row.append(tt2, el('span', 'pill ' + (vieja ? 'priv' : it.e.cls), vieja ? 'Sin hora' : it.e.txt));
+      if (vieja) sinBox.append(row); else dayBox.append(row);
     });
+    if (pasBox) pasBox.firstChild.textContent = 'Ya salieron (' + nPas + ' videos, desde el ' + fmtDay.format(items[0].t) + ')';
+    if (sinBox) { sinBox.firstChild.textContent = 'Copias privadas sin hora (' + nSin + '): viejas o reemplazadas, no salen'; cal.append(sinBox); }
 
     var fz = d.faltan || [];
     $('faltanBox').hidden = !fz.length;
@@ -2093,10 +2171,29 @@ details.mas > .in > * { min-width: 0; }
     ((d.yt && d.yt.videos) || []).filter(programadoVivo).forEach(function (v) { var t = Date.parse(v.prog); if (t > ahora) { var k = 'YouTube|' + new Date(t).toISOString().slice(0, 16); if (!vistos[k]) { vistos[k] = 1; P.push({ red: 'YouTube', at: v.prog, t: v.t }); } } });
     P.sort(function (a, b) { return Date.parse(a.at) - Date.parse(b.at); });
     var S = $('saleLuego'); S.replaceChildren();
-    if (!P.length) S.append(el('div', 'empty', 'No hay nada programado.'));
+    // be4b89e: un renglón por video con todas sus redes (antes #75 ocupaba 3 de los 6 renglones) y la lista completa se abre aquí mismo
+    var GR = [], gk = {};
+    P.forEach(function (x) {
+      var k = new Date(x.at).toISOString().slice(0, 16) + '|' + x.t;
+      if (!gk[k]) { gk[k] = { at: x.at, t: x.t, reds: [] }; GR.push(gk[k]); }
+      if (gk[k].reds.indexOf(x.red) < 0) gk[k].reds.push(x.red);
+    });
+    function filaGrupo(g) {
+      var li = el('li', 'gr'), t = new Date(g.at);
+      li.append(el('span', 'hr', (dayKey.format(t) !== dayKey.format(new Date()) ? fmtWd.format(t).replace('.', '') + ' ' : '') + fmtHr.format(t)));
+      var rs = el('span', 'reds');
+      g.reds.forEach(function (r) { var rd = el('span', 'rd', AB[r] || r); rd.style.background = COLOR_RED[r] || '#ccc'; rd.title = r; rs.append(rd); });
+      li.append(rs);
+      var tt = el('span', 't', g.t || '(sin título)'); tt.title = g.t || ''; li.append(tt);
+      return li;
+    }
+    if (!GR.length) S.append(el('div', 'empty', 'No hay nada programado.'));
     else {
-      var ul3 = el('ul', 'pl'); P.slice(0, 6).forEach(function (x) { ul3.append(filaPub(x, true)); }); S.append(ul3);
-      if (P.length > 6) S.append(el('div', 'plnota', 'y ' + (P.length - 6) + ' más (Centro de operaciones, abajo).'));
+      var ul3 = el('ul', 'pl'); GR.slice(0, 6).forEach(function (g) { ul3.append(filaGrupo(g)); }); S.append(ul3);
+      if (GR.length > 6) {
+        var dm = el('details', 'calpl'); dm.append(el('summary', null, 'Ver los ' + (GR.length - 6) + ' siguientes (hasta ' + fmtWd.format(new Date(GR[GR.length - 1].at)).replace('.', '') + ')'));
+        var ul4 = el('ul', 'pl'); GR.slice(6).forEach(function (g) { ul4.append(filaGrupo(g)); }); dm.append(ul4); S.append(dm);
+      }
     }
     RES.c = { hoy: hoy.length, vHoy: vHoy, ayer: ayer.length, sig: P[0] || null };
   }
@@ -2173,11 +2270,26 @@ details.mas > .in > * { min-width: 0; }
     });
   }
 
-  TAREAS.forEach(function (x) {
-    var li = el('li'); li.append(el('span', 'who' + (x.who === 'Tú' ? ' yo' : ''), x.who));
-    var t = el('div', null, x.t); t.append(el('span', 'when', x.when)); li.append(t);
-    $('tareas').append(li);
-  });
+  function pintaTareas(O) {
+    var U = $('tareas'); U.replaceChildren();
+    var ags = O && Array.isArray(O.agentes) ? O.agentes.filter(function (a) { return a && a.id && a.horario; }) : [];
+    if (ags.length) {   // b8bd47b: las rutinas salen de la oficina (horarios en hora del centro de México), no de una lista fija
+      ags.sort(function (a, b) { return (a.apagado ? 1 : 0) - (b.apagado ? 1 : 0); });
+      ags.forEach(function (a) {
+        var li = el('li'); li.append(el('span', 'who', a.nombre || a.id));
+        var t = el('div', null, (a.puesto || '') + (a.apagado ? ' · apagada: la hace la revisión de cada hora' : ''));
+        var uc = a.ultima_corrida || ((a.ultimos || [])[0] || {}).f;
+        t.append(el('span', 'when', (a.apagado ? 'sin turno propio' : a.horario + ' (CDMX)') + ' · ' + (a.estado === 'atrasado' ? 'ATRASADA, ' : '') + (uc ? 'última corrida ' + hz(uc) : 'sin corridas')));
+        li.append(t); U.append(li);
+      });
+    }
+    TAREAS.filter(function (x) { return !ags.length || x.who === 'Tú'; }).forEach(function (x) {
+      var li = el('li'); li.append(el('span', 'who' + (x.who === 'Tú' ? ' yo' : ''), x.who));
+      var t = el('div', null, x.t); t.append(el('span', 'when', x.when)); li.append(t);
+      U.append(li);
+    });
+  }
+  pintaTareas(null);
 
   $('loginForm').addEventListener('submit', function (e) {
     e.preventDefault();

@@ -1215,7 +1215,7 @@ function pintarDec() {
 }
 function pintarCer() {
   const { g, tx } = CER.L, w = CER.w, h = CER.h, C = S.cerebro;
-  if (!C) return sinDatos(CER.L, w, h, 'EL CEREBRO', S.db ? 'Esperando datos del cerebro…' : 'Sin base de datos en esta vista');
+  if (!C) return sinDatos(CER.L, w, h, 'EL CEREBRO', S.db || LECTURA ? 'Esperando datos del cerebro…' : 'Sin base de datos en esta vista');
   cabecera(g, w, h, 'EL CEREBRO', 'Reglas activas, pruebas con fecha y umbral, lecciones · actualizado ' + (hace(C.actualizado) || 'sin fecha'));
   const cw = (w - 120 - 60) / 3, top = 196, bottom = h - 22;
   const cols = [
@@ -1882,7 +1882,7 @@ function pintarJunta() {
     cabecera(g, w, h, 'JUNTA EN CURSO', (j.areas || []).map(nombreDe).join(' · ') + (act.length > 1 ? ' · +' + (act.length - 1) + ' juntas más' : ''));
     g.fillStyle = '#ffb02e'; g.font = '900 30px Inter, Arial'; g.fillText('PROBLEMA', 40, 236); g.fillStyle = '#fff3dc'; g.font = '800 42px Inter, Arial'; envolver(g, j.problema, 40, 290, w - 80, 52, 4);
     g.fillStyle = '#ffd9a0'; g.font = '900 96px Inter, Arial'; g.textAlign = 'right'; g.fillText('⏱ ' + (hh ? hh + ':' : '') + String(mm).padStart(2, '0') + ':' + String(ss).padStart(2, '0'), w - 40, h - 40); g.textAlign = 'left';
-    g.fillStyle = '#b3a5cc'; g.font = '600 26px Inter, Arial'; g.fillText('Al cerrar la junta aquí aparece el acta: daño, solución y prevención.', 40, h - 50); }
+    g.fillStyle = '#b3a5cc'; g.font = '600 24px Inter, Arial'; envolver(g, 'Al cerrar la junta aquí aparece el acta: daño, solución y prevención.', 40, h - 78, 600, 30, 2); }   // b03d702: en una línea chocaba con el reloj (96 px) cuando pasa de 10 h
   else if (rec.length) { const j = rec[0]; cabecera(g, w, h, 'ACTA DE JUNTA', j.problema + ' · ' + (hace(j.fin || j.inicio) || ''));
     const cw = (w - 80 - 40) / 3; [['DAÑO', '#ff5c7a', j.dano], ['SOLUCIÓN', '#3ddc97', j.solucion], ['PARA QUE NO VUELVA A PASAR', '#4fe3ff', j.prevencion]].forEach(([tt, c, x], i) => { const x0 = 40 + i * (cw + 20); rr(g, x0, 190, cw, h - 220, 18, '#160d28'); rr(g, x0, 190, cw, 10, 5, c); g.fillStyle = c; g.font = '900 28px Inter, Arial'; g.fillText(cortar(g, tt, cw - 40), x0 + 20, 244); g.fillStyle = '#f4eefb'; g.font = '500 25px Inter, Arial'; envolver(g, x || 'sin dato', x0 + 20, 288, cw - 40, 31, Math.floor((h - 320) / 31)); }); }
   else { const r = juntasRecientes(0)[0]; cabecera(g, w, h, 'SALA DE JUNTAS', 'Libre · cuando hay un problema, aquí se resuelve entre las áreas'); g.fillStyle = '#b3a5cc'; g.font = '600 34px Inter, Arial'; envolver(g, r ? 'Última junta: ' + r.problema + ' → resuelta ' + hace(r.fin || r.inicio) : 'Sin juntas todavía.', 40, 280, w - 80, 44, 4); }
@@ -2585,6 +2585,14 @@ function loginPanel(msg) {
   $('pwF').onsubmit = e => { e.preventDefault(); const k = $('pwI').value.trim(); if (!k) return; try { localStorage.setItem(KEY_PANEL, k); } catch (er) {} cargarPanel(); };
   setTimeout(() => { try { $('pwI').focus(); } catch (e) {} }, 50);
 }
+function cerebroDeResumen(r) {   // cerebro_resumen (oficina_v4) → forma de cerebro/principal que pintan pintarCer y abrirCerebro
+  if (!r || typeof r !== 'object') return null;
+  const red = t => { const m = /^\[([^\]]+)\]/.exec(String(t || '')); return m ? m[1] : ''; };
+  return { actualizado: r.t || null, resumen: true,
+    reglas: (r.reglas || []).filter(x => x && x.texto).map(x => Object.assign({}, x, { estado: 'activa', red: x.red || red(x.texto) })),
+    pruebas: (r.pruebas || []).filter(x => x && x.hipotesis).map(x => Object.assign({}, x, { red: x.red || red(x.hipotesis) })),
+    lecciones: (r.aprendido_hoy || []).filter(Boolean).map(x => typeof x === 'string' ? { texto: x } : x) };
+}
 async function cargarPanel() {
   let k = null; try { k = localStorage.getItem(KEY_PANEL); } catch (e) {}
   if (!k) { loginPanel(''); estadoConexion('mal', 'Falta la contraseña'); return; }
@@ -2596,7 +2604,8 @@ async function cargarPanel() {
     const j = await r.json(); const O = j && j.oficina_vivo;
     if (!O) { mostrarMsg('Todavía no llega la foto de la oficina: aparece sola en cuanto llegue.'); estadoConexion('viejo', 'Sin foto todavía'); return; }
     S.estado = O; S.decisiones = (Array.isArray(j.decisiones_pendientes) ? j.decisiones_pendientes : []).filter(d => d && d.pregunta && !d.respuesta).map((d, i) => Object.assign({ id: d.id || 'd' + i }, d)); S.decListas = true;
-    ocultarMsg(); alLlegarEstado(); pintarDec(); pintarAviso(); pintarMis(); revisarAvisos(); pintarRecepcion();
+    S.cerebro = cerebroDeResumen(O.cerebro_resumen);   // b03d702: en el panel no hay base de datos; el CEREBRO se arma con el resumen que ya viene en la foto
+    ocultarMsg(); alLlegarEstado(); pintarDec(); pintarCer(); pintarAviso(); pintarMis(); revisarAvisos(); pintarRecepcion();
   } catch (e) { estadoConexion('mal', 'Sin conexión'); if (!S.estado) mostrarMsg('No pude leer los datos del panel (' + (e.message || 'error') + '). Reintento en 5 minutos.'); }
 }
 function arrancarPanel() {
@@ -2729,16 +2738,16 @@ function abrirPantalla(tipo) {
 }
 function htmlCerebro() { return v4CerebroHtml() + htmlCerebro0(); }
 function htmlCerebro0() {
-  const C = S.cerebro; if (!C) return `<p class="f">${S.db ? 'Todavía no llegan los datos del cerebro.' : 'Sin base de datos en esta vista.'}</p>`;
+  const C = S.cerebro; if (!C) return `<p class="f">${S.db || LECTURA ? 'Todavía no llegan los datos del cerebro.' : 'Sin base de datos en esta vista.'}</p>`;
   const pr = (C.pruebas || []).filter(Boolean);
   return '<h4>Pruebas en curso</h4>' + (pr.map(p => { const r = p.resultado, cls = r === 'confirmada' ? ' confirmada' : r === 'descartada' ? ' descartada' : ''; const cuando = r ? (r === 'confirmada' ? '✔ CONFIRMADA' : '✘ DESCARTADA') + (p.dato_resultado ? ' · ' + p.dato_resultado : '') : (p.revisar ? 'Se mide ' + falta(p.revisar) + ' (' + fF(fmtDH, p.revisar) + ')' : 'Se mide cuando haya dato'); return `<div class="prueba${cls}"><span class="red ${esc(p.red)}">${esc(p.red)}</span> ${esc(p.hipotesis)}<small>Cambio: ${esc(p.cambio || 'sin dato')}</small><small>Cómo se mide: ${esc(p.como || 'sin dato')}</small><small>Umbral: ${esc(p.umbral || 'sin dato')}</small><div class="cuando">${esc(cuando)}</div></div>`; }).join('') || '<p class="f">Sin pruebas abiertas.</p>')
-    + '<h4>Reglas que todos obedecen</h4>' + ((C.reglas || []).filter(r => r && r.estado === 'activa').map(r => `<div class="regla"><span class="red ${esc(r.red)}">${esc(r.red)}</span> ${esc(r.texto)}<small>Dato: ${esc(r.dato || 'sin dato')}</small></div>`).join('') || '<p class="f">Sin reglas todavía.</p>')
+    + '<h4>Reglas que todos obedecen' + (C.resumen ? ' (resumen de la foto)' : '') + '</h4>' + ((C.reglas || []).filter(r => r && r.estado === 'activa').map(r => `<div class="regla"><span class="red ${esc(r.red)}">${esc(r.red)}</span> ${esc(r.texto)}<small>Dato: ${esc(r.dato || 'sin dato')}</small></div>`).join('') || '<p class="f">Sin reglas todavía.</p>')
     + '<h4>Políticas</h4><ul>' + ((C.politicas || []).map(p => `<li>${esc(p.texto)}${p.por_que ? ` <span class="f">· ${esc(p.por_que)}</span>` : ''}</li>`).join('') || '<li class="f">Sin políticas.</li>') + '</ul>'
     + '<h4>Lecciones recientes</h4><ul>' + ((C.lecciones || []).slice(0, 8).map(l => `<li>${esc(l.texto)} <span class="f">· ${esc(l.t || '')}</span></li>`).join('') || '<li class="f">Sin lecciones todavía.</li>') + '</ul>';
 }
 function abrirCerebro() {
   abrirFicha('cerebro', `<h3>El Cerebro</h3><div class="sub">Lo que se probó y se aprendió${S.cerebro && S.cerebro.actualizado ? ' · actualizado ' + esc(hace(S.cerebro.actualizado)) : ''}</div>
-    <form class="form" id="fCer"><h4>Pregúntale al cerebro</h4><input type="text" id="qCer" placeholder="¿Qué hemos aprendido de los ganchos?" autocomplete="off"><div class="acc"><button class="b pri" type="submit">Preguntar</button></div><div class="resp" id="rCer" hidden></div></form><div id="cerDatos">${htmlCerebro()}</div>`);
+    <form class="form" id="fCer"${LECTURA ? ' hidden' : ''}><h4>Pregúntale al cerebro</h4><input type="text" id="qCer" placeholder="¿Qué hemos aprendido de los ganchos?" autocomplete="off"><div class="acc"><button class="b pri" type="submit">Preguntar</button></div><div class="resp" id="rCer" hidden></div></form><div id="cerDatos">${htmlCerebro()}</div>`);
   $('fCer').onsubmit = e => { e.preventDefault(); preguntarCerebro($('qCer').value.trim()); };
   ganar(XP.cerebro, 'Visitaste El Cerebro', 'cerebro:' + hoy(), { cerebro: true });
 }
