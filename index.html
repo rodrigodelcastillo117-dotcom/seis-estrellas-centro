@@ -708,6 +708,11 @@ details.mas > summary > span { min-width: 0; max-width: calc(100% - 28px); }
     </div>
   </details>
 
+  <details class="mas" id="mOpt">
+    <summary><span>Optimización: lo que viene</span> <small id="mOptSub">puntaje 0–100 de cada salida de los próximos 7 días y lo que le falta</small></summary>
+    <div class="in"><div id="optCuerpo"><div class="vacio2">Aparece con la próxima foto.</div></div></div>
+  </details>
+
   <details class="mas" id="mFab">
     <summary><span>La fábrica de clips</span> <small id="mFabSub">qué se está haciendo, qué está listo y qué ya salió</small></summary>
     <div class="in">
@@ -1028,6 +1033,21 @@ details.mas > summary > span { min-width: 0; max-width: calc(100% - 28px); }
       c.append(d0, spark(s.puntos ? s.puntos.map(function (p) { return [p[0], p[1]]; }) : [], RED[k].c));
       R.append(c);
     });
+  }
+  // 23-nov (ba82571): «Optimización: lo que viene» — lo escribe verificador.py --json (optimizacion.json) y lo copia panel_snapshot.py
+  function renderOpt(O) {
+    var box = $('optCuerpo'); if (!box) return;
+    if (!O || !O.n) { box.replaceChildren(el('div', 'vacio2', 'Sin datos todavía.')); return; }
+    $('mOptSub').textContent = 'promedio ' + O.promedio + '/100 en ' + O.n + ' salidas · ' + O.errores + ' ❌ · ' + O.avisos + ' ⚠';
+    var fr = document.createDocumentFragment();
+    fr.appendChild(el('div', 'vacio2', 'Los 5 con menor puntaje (' + O.red_hora + '). Cada uno dice qué le falta; las mejoras empiezan por ahí.'));
+    (O.peores || []).forEach(function (x) {
+      var row = el('div', 'vacio2', null);
+      var b = el('b', null, x.puntaje + ' · ' + x.red + ' #' + x.id + ' · ' + x.cuando);
+      row.appendChild(b); row.appendChild(document.createTextNode(' — ' + (x.faltan || []).join('; ')));
+      fr.appendChild(row);
+    });
+    box.replaceChildren(fr);
   }
   function renderFabrica(F, ver) {
     if (!F) {
@@ -1927,6 +1947,7 @@ details.mas > summary > span { min-width: 0; max-width: calc(100% - 28px); }
     try { renderOV(d); } catch (e) { console.warn('oficina en vivo', e); }
     try { pintaTareas(d.oficina_vivo); } catch (e) { console.warn('automatización', e); }
     try { renderFabrica(F, F && F.act); } catch (e) { console.warn('fabrica', e); }
+    try { renderOpt(d.optimizacion); } catch (e) { console.warn('optimizacion', e); }
     try { renderRedes(d, F); } catch (e) { console.warn('redes', e); }
     try { renderOficina(d.oficina || (d.ig && d.ig._of)); } catch (e) { console.warn('oficina', e); }
     try { renderMon(d.oficina); } catch (e) { console.warn('mon', e); }
